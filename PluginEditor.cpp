@@ -111,36 +111,36 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
 
 void InterfaceTestAudioProcessorEditor::resized()
 {
-    auto top = getHeight() * 0.16;
-    auto margin = getWidth() * 0.1;
+    auto top = getHeight() * 0.15;
+    auto margin = getWidth() * 0.05;
     
-    auto blockW = getWidth() * 0.17;
-    auto blockH = getHeight() * 0.4;
+    auto blockW = getWidth() * 0.21;
+    auto blockH = getHeight() * 0.42;
 
-    auto blockSep = getWidth() * 0.04;
+    auto blockSep = getWidth() * 0.02;
 
     auto LFOH = getHeight() * 0.74;
     auto FilterH = getHeight() * 0.3;
 
     sectionAmbience.setBounds(  margin, 
-                        top,
-                        2 * blockW + blockSep,
-                        blockH);
+                                top,
+                                2 * blockW + blockSep,
+                                blockH);
 
-    sectionDrive.setBounds(  margin + 2 * blockW + 2 * blockSep,
-                        top,
-                        blockW,
-                        blockH);
+    sectionDrive.setBounds(     margin + 2 * blockW + 2 * blockSep,
+                                top,
+                                blockW,
+                                blockH);
 
-    sectionLFO.setBounds(  margin + 3 * blockW + 3 * blockSep,
-                        top, 
-                        blockW, 
-                        LFOH);
+    sectionLFO.setBounds(       margin + 3 * blockW + 3 * blockSep,
+                                top, 
+                                blockW, 
+                                LFOH);
 
-    sectionFilter.setBounds(  margin,
-                        top + blockH + 0.5 * blockSep,
-                        3 * blockW + 2 * blockSep,
-                        FilterH);
+    sectionFilter.setBounds(    margin,
+                                top + blockH + 0.5 * blockSep,
+                                3 * blockW + 2 * blockSep,
+                                FilterH);
 
     //dial.setBounds(border1.getX() + leftMargin, topMargin + 0.12 * border1.getHeight(), dialSize, dialSize);
     //dial2.setBounds(border1.getX() + leftMargin + border1.getWidth() * 0.5, topMargin + 0.12 * border1.getHeight(), dialSize, dialSize);
