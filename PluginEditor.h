@@ -41,11 +41,11 @@ private:
 
     //juce::Label dialLabel;
 
-    juce::GroupComponent border1;
-    juce::GroupComponent border2;
+    juce::GroupComponent sectionAmbience;
+    juce::GroupComponent sectionDrive;
 
-    juce::GroupComponent border3;
-    juce::GroupComponent border4;
+    juce::GroupComponent sectionLFO;
+    juce::GroupComponent sectionFilter;
 
     juce::Image background;
 

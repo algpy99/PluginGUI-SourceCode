@@ -18,21 +18,21 @@ InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceT
     initDial2();
     initButton();
 
-    addAndMakeVisible(border1);
-    border1.setText("Ambience");
-    border1.setColour(juce::GroupComponent::ColourIds::outlineColourId,juce::Colour(0xffdd871e));
+    addAndMakeVisible(sectionAmbience);
+    sectionAmbience.setText("Ambience");
+    sectionAmbience.setColour(juce::GroupComponent::ColourIds::outlineColourId,juce::Colour(0xffdd871e));
 
-    addAndMakeVisible(border2);
-    border2.setText("Drive");
-    border2.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colour(0xffdd871e));
+    addAndMakeVisible(sectionDrive);
+    sectionDrive.setText("Drive");
+    sectionDrive.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colour(0xffdd871e));
 
-    addAndMakeVisible(border3);
-    border3.setText("LFO");
-    border3.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colour(0xff0f9050));
+    addAndMakeVisible(sectionLFO);
+    sectionLFO.setText("LFO");
+    sectionLFO.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colour(0xff0f9050));
 
-    addAndMakeVisible(border4);
-    border4.setText("Filter");
-    border4.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colour(0xffdd871e));
+    addAndMakeVisible(sectionFilter);
+    sectionFilter.setText("Filter");
+    sectionFilter.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colour(0xffdd871e));
 }
 
 void InterfaceTestAudioProcessorEditor::initWindow()
@@ -115,30 +115,32 @@ void InterfaceTestAudioProcessorEditor::resized()
     auto margin = getWidth() * 0.1;
     
     auto blockW = getWidth() * 0.17;
-    auto blockSep = getWidth() * 0.04;
-
-    auto filterH = getHeight() * 0.3;
     auto blockH = getHeight() * 0.4;
 
-    border1.setBounds(  margin, 
-                        top,
-                     2 * blockW + blockSep,
-                    blockH);
+    auto blockSep = getWidth() * 0.04;
 
-    border2.setBounds(  margin + 2 * blockW + 2 * blockSep,
-                        top,
-                     blockW,
-                    blockH);
+    auto LFOH = getHeight() * 0.74;
+    auto FilterH = getHeight() * 0.3;
 
-    border3.setBounds(  margin + 3 * blockW + 3 * blockSep,
+    sectionAmbience.setBounds(  margin, 
+                        top,
+                        2 * blockW + blockSep,
+                        blockH);
+
+    sectionDrive.setBounds(  margin + 2 * blockW + 2 * blockSep,
+                        top,
+                        blockW,
+                        blockH);
+
+    sectionLFO.setBounds(  margin + 3 * blockW + 3 * blockSep,
                         top, 
-                     blockW, 
-                          getHeight() * 0.74);
+                        blockW, 
+                        LFOH);
 
-    border4.setBounds(  margin,
+    sectionFilter.setBounds(  margin,
                         top + blockH + 0.5 * blockSep,
-                     3 * blockW + 2 * blockSep,
-                          getHeight() * 0.3);
+                        3 * blockW + 2 * blockSep,
+                        FilterH);
 
     //dial.setBounds(border1.getX() + leftMargin, topMargin + 0.12 * border1.getHeight(), dialSize, dialSize);
     //dial2.setBounds(border1.getX() + leftMargin + border1.getWidth() * 0.5, topMargin + 0.12 * border1.getHeight(), dialSize, dialSize);
