@@ -31,13 +31,23 @@ private:
 
     void initWindow();
     void initDial();
+    void initDial2();
     void initButton();
 
     juce::Slider dial;
+    juce::Slider dial2;
 
     juce::TextButton button;
 
-    juce::Label dialLabel;
+    //juce::Label dialLabel;
+
+    juce::GroupComponent border1;
+    juce::GroupComponent border2;
+
+    juce::GroupComponent border3;
+    juce::GroupComponent border4;
+
+    juce::Image background;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
