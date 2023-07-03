@@ -35,6 +35,12 @@ void InterfaceTestAudioProcessorEditor::initDial()
     dial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colour(0xfff7941d));
     dial.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colour(0xffe4e2dd));
     dial.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colour(0xffe4e2dd));
+
+    addAndMakeVisible(dialLabel);
+    dialLabel.setText("Ambience", juce::dontSendNotification);
+    dialLabel.attachToComponent(&dial, false);
+    dialLabel.setJustificationType(juce::Justification::centred);
+    dialLabel.setFont(juce::Font(dialLabel.getFont().withHeight(24.0f)));
 }
 
 void InterfaceTestAudioProcessorEditor::initButton()
