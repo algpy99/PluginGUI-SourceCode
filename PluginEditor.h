@@ -56,13 +56,11 @@ public:
             g.strokePath(valueArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
         }
 
-        auto thumbWidth = lineW * 2.0f;
         juce::Point<float> thumbPoint(  bounds.getCentreX() + (arcRadius - 10.0f) * std::cos(toAngle - juce::MathConstants<float>::halfPi),
                                         bounds.getCentreY() + (arcRadius - 10.0f) * std::sin(toAngle - juce::MathConstants<float>::halfPi));
         g.setColour(MyColours::orange);
         g.drawLine(backgroundArc.getBounds().getCentreX(), backgroundArc.getBounds().getCentreY(), thumbPoint.getX(), thumbPoint.getY(), lineW * 1.2);
     }
-
 };
 
 //==============================================================================
@@ -78,8 +76,6 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-
-
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -88,30 +84,18 @@ private:
     MyLookAndFeel myLookAndFeel;
 
     void initWindow();
-    void initDial();
-    //void initDial2();
-    //void initButton();
+    void initDials();
 
-    juce::Slider dial;
-
-    /*
+    juce::Slider dial1;
     juce::Slider dial2;
 
-    juce::TextButton button;
 
-    //juce::Label dialLabel;
-    */
-
-    juce::GroupComponent sectionAmbience;
+    juce::GroupComponent sectionAtmosphere;
     juce::GroupComponent sectionDrive;
     juce::GroupComponent sectionFilter;
 
     juce::GroupComponent sectionLFO;
-    juce::GroupComponent sectionGraph;
-    
-
-    //juce::Image background;
-    
+    juce::GroupComponent sectionGraph;   
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
