@@ -67,6 +67,30 @@ void InterfaceTestAudioProcessorEditor::initDials()
     dial2.setLookAndFeel(&myLookAndFeel);
     dial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalGrey);
 
+    addAndMakeVisible(dial3);
+    dial3.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    dial3.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    dial3.setRange(0.0, 100.0, 0.1);
+    dial3.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
+    dial3.setLookAndFeel(&myLookAndFeel);
+    dial3.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalGrey);
+
+    addAndMakeVisible(dial4);
+    dial4.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    dial4.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    dial4.setRange(0.0, 100.0, 0.1);
+    dial4.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
+    dial4.setLookAndFeel(&myLookAndFeel);
+    dial4.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalGrey);
+
+    addAndMakeVisible(dial5);
+    dial5.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    dial5.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    dial5.setRange(0.0, 100.0, 0.1);
+    dial5.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
+    dial5.setLookAndFeel(&myLookAndFeel);
+    dial5.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalGrey);
+
 }
 
 InterfaceTestAudioProcessorEditor::~InterfaceTestAudioProcessorEditor()
@@ -103,6 +127,7 @@ void InterfaceTestAudioProcessorEditor::resized()
     auto FilterH = getHeight() * 0.3;
 
     auto dialSize = 0.6 * blockW;
+    auto dialSizeSmall = 0.4 * blockW;
 
     sectionAtmosphere.setBounds(  margin, 
                                 top,
@@ -129,7 +154,13 @@ void InterfaceTestAudioProcessorEditor::resized()
                              2 * blockW + blockSep,
                             FilterH);
 
-    dial1.setBounds(2 * margin, top + margin, dialSize, dialSize);
-    dial2.setBounds(2 * margin + blockW, top + margin, dialSize, dialSize);
+    dial1.setBounds(margin + 0.5f * (blockW - dialSize), top + 0.5f * (blockH - dialSize), dialSize, dialSize);
+    dial2.setBounds(margin + blockW + blockSep + 0.5f * (blockW - dialSize), top + 0.5f * (blockH - dialSize), dialSize, dialSize);
 
+    dial3.setBounds(margin + 2 * blockW + 2 * blockSep + 0.5f * (blockW - dialSize), top + 0.5f * (blockH - dialSize), dialSize, dialSize);
+    
+    dial4.setBounds(margin + 0.5f * (blockW - 2.0f * dialSizeSmall), top + blockH + margin, dialSizeSmall, dialSizeSmall);
+    dial5.setBounds(margin + 0.5f * (blockW - 2.0f * dialSizeSmall) + dialSizeSmall, top + blockH + margin, dialSizeSmall, dialSizeSmall);
+
+    //n + 0.5f * (blockW - 2.0f *  0.7f * dialSize)
 }

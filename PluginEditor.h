@@ -102,6 +102,10 @@ private:
 
     juce::Slider dial1;
     juce::Slider dial2;
+    juce::Slider dial3;
+    juce::Slider dial4;
+    juce::Slider dial5;
+    juce::Slider dial6;
 
 
     juce::GroupComponent sectionAtmosphere;
