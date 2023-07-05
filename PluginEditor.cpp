@@ -19,23 +19,23 @@ InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceT
 
     addAndMakeVisible(sectionAtmosphere);
     sectionAtmosphere.setText("Atmosphere");
-    sectionAtmosphere.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::bossMidGrey);
+    sectionAtmosphere.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::vitalMidGrey);
     
     addAndMakeVisible(sectionDrive);
     sectionDrive.setText("Drive");
-    sectionDrive.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::bossMidGrey);
+    sectionDrive.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::vitalMidGrey);
 
     addAndMakeVisible(sectionFilter);
     sectionFilter.setText("Filter");
-    sectionFilter.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::bossMidGrey);
+    sectionFilter.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::vitalMidGrey);
 
     addAndMakeVisible(sectionLFO);
     sectionLFO.setText("LFO");
-    sectionLFO.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::green);
+    sectionLFO.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::vitalMidGrey);
 
     addAndMakeVisible(sectionGraph);
     sectionGraph.setText("Output");
-    sectionGraph.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::green);
+    sectionGraph.setColour(juce::GroupComponent::ColourIds::outlineColourId, MyColours::vitalMidGrey);
 }
 
 void InterfaceTestAudioProcessorEditor::initWindow()
@@ -44,9 +44,9 @@ void InterfaceTestAudioProcessorEditor::initWindow()
     auto height = 750;
     float ratio = 2;
     setResizable(true, true);
-    setResizeLimits(0.5 * width, 0.5 * height, 0.8 * width, 0.8 * height);
+    setResizeLimits(0.4 * width, 0.4 * height, 0.8 * width, 0.8 * height);
     getConstrainer()->setFixedAspectRatio(ratio);
-    setSize(0.5 * width, 0.5 * height);
+    setSize(0.4 * width, 0.4 * height);
 }
 
 void InterfaceTestAudioProcessorEditor::initDials()
@@ -57,7 +57,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     dial1.setRange(0.0, 100.0, 0.1);
     dial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     dial1.setLookAndFeel(&myLookAndFeel);
-    dial1.setColour(juce::Slider::textBoxOutlineColourId, MyColours::bossBlack);
+    dial1.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalGrey);
 
     addAndMakeVisible(dial2);
     dial2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -65,7 +65,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     dial2.setRange(0.0, 100.0, 0.1);
     dial2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     dial2.setLookAndFeel(&myLookAndFeel);
-    dial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::bossBlack);
+    dial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalGrey);
 
 }
 
@@ -85,7 +85,7 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
         sectionAtmosphere.setColour(juce::GroupComponent::ColourIds::textColourId, MyColours::cream);
     }
 
-    g.fillAll (MyColours::bossBlack);
+    g.fillAll (MyColours::vitalGrey);
 }
 
 void InterfaceTestAudioProcessorEditor::resized()

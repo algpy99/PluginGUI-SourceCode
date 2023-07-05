@@ -24,20 +24,33 @@ public:
 
         auto radius = juce::jmin(width, height) / 2.0f;
         auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-        auto lineW = 0.4f * juce::jmin(8.0f, radius * 0.5f);
+        auto lineW = 0.4f * juce::jmin(radius * 0.2f, radius * 0.5f);
         auto arcRadius = radius - lineW;
+
+
+        juce::Path buttonBackground;
+        buttonBackground.addCentredArc(bounds.getCentreX(),
+            bounds.getCentreY(),
+            arcRadius,
+            arcRadius,
+            0.0f,
+            juce::MathConstants<float>::pi * 1.0f,
+            juce::MathConstants<float>::pi * 3.0f,
+            true);
+        g.setColour(MyColours::vitalMidGrey);
+        g.fillPath(buttonBackground);
 
         juce::Path backgroundArc;
         backgroundArc.addCentredArc(bounds.getCentreX(),
             bounds.getCentreY(),
-            arcRadius,
-            arcRadius,
+            arcRadius - 2 * lineW,
+            arcRadius - 2 * lineW,
             0.0f,
             rotaryStartAngle,
             rotaryEndAngle,
             true);
 
-        g.setColour(MyColours::bossMidGrey);
+        g.setColour(MyColours::vitalGrey);
         g.strokePath(backgroundArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 
         if (slider.isEnabled())
@@ -45,8 +58,8 @@ public:
             juce::Path valueArc;
             valueArc.addCentredArc(bounds.getCentreX(),
                 bounds.getCentreY(),
-                arcRadius,
-                arcRadius,
+                arcRadius - 2 * lineW,
+                arcRadius - 2 * lineW,
                 0.0f,
                 rotaryStartAngle,
                 toAngle,
@@ -56,9 +69,10 @@ public:
             g.strokePath(valueArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
         }
 
-        juce::Point<float> thumbPoint(  bounds.getCentreX() + (arcRadius - 10.0f) * std::cos(toAngle - juce::MathConstants<float>::halfPi),
-                                        bounds.getCentreY() + (arcRadius - 10.0f) * std::sin(toAngle - juce::MathConstants<float>::halfPi));
-        g.setColour(MyColours::orange);
+        juce::Point<float> thumbPoint(  bounds.getCentreX() + (arcRadius - 1.7 * lineW) * std::cos(toAngle - juce::MathConstants<float>::halfPi),
+                                        bounds.getCentreY() + (arcRadius - 1.7 * lineW) * std::sin(toAngle - juce::MathConstants<float>::halfPi));
+        
+        g.setColour(MyColours::cream);
         g.drawLine(backgroundArc.getBounds().getCentreX(), backgroundArc.getBounds().getCentreY(), thumbPoint.getX(), thumbPoint.getY(), lineW * 1.2);
     }
 };
