@@ -12,19 +12,25 @@
 //==============================================================================
 InterfaceTestAudioProcessor::InterfaceTestAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout())
+    : AudioProcessor(BusesProperties()
+#if ! JucePlugin_IsMidiEffect
+#if ! JucePlugin_IsSynth
+        .withInput("Input", juce::AudioChannelSet::stereo(), true)
+#endif
+        .withOutput("Output", juce::AudioChannelSet::stereo(), true)
+#endif
+    ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), waveViewerPre(1), waveViewerPost(1)
 #endif
 {
     treeState.addParameterListener("roomSize", this);
     treeState.addParameterListener("damping", this);
     treeState.addParameterListener("wetLevel", this);
+
+    waveViewerPre.setRepaintRate(30);
+    waveViewerPre.setBufferSize(256);
+
+    waveViewerPost.setRepaintRate(30);
+    waveViewerPost.setBufferSize(256);
 }
 
 /*
@@ -59,13 +65,13 @@ void InterfaceTestAudioProcessor::parameterChanged(const juce::String& parameter
 {
     updateParameters();
 
-    /*
+    
     if (parameterID == "wetLevel")
     {
         wetLevel = newValue;
         DBG("wetLevel is: " << newValue);
     }
-    */
+    
 
     treeState.addParameterListener("roomSize", this);
     treeState.addParameterListener("damping", this);
@@ -74,9 +80,11 @@ void InterfaceTestAudioProcessor::parameterChanged(const juce::String& parameter
 
 void InterfaceTestAudioProcessor::updateParameters()
 {
-    parameters.wetLevel = roomSize;
-    parameters.wetLevel = damping;
-    parameters.wetLevel = wetLevel;
+    /*
+    parameters.wetLevel = 0.5;
+    parameters.wetLevel = 0.5;
+    */
+    parameters.wetLevel = 0.5;
     reverb.setParameters(parameters);
 }
 
@@ -199,14 +207,19 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
     juce::dsp::AudioBlock<float> block(buffer);
 
-    reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
+    waveViewerPre.pushBuffer(buffer);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
 
-        // ..do something to the data...
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            channelData[sample] = buffer.getSample(channel, sample) * 3.0f;
+        }
     }
+     
+    waveViewerPost.pushBuffer(buffer);
 }
 
 //==============================================================================

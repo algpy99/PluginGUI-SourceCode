@@ -100,12 +100,14 @@ private:
     void initWindow();
     void initDials();
 
-    juce::Slider dial1;
-    juce::Slider dial2;
-    juce::Slider dial3;
-    juce::Slider dial4;
-    juce::Slider dial5;
-    juce::Slider dial6;
+    void InterfaceTestAudioProcessorEditor::changeSectionColor();
+
+    juce::Slider reverbDial1;
+    juce::Slider reverbDial2;
+    juce::Slider DistoDial;
+    juce::Slider filterDial1;
+    juce::Slider filterDial2;
+    juce::Slider LFODial;
 
 
     juce::GroupComponent sectionAtmosphere;
@@ -113,7 +115,7 @@ private:
     juce::GroupComponent sectionFilter;
 
     juce::GroupComponent sectionLFO;
-    juce::GroupComponent sectionGraph;   
+    juce::GroupComponent sectionGraph;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
