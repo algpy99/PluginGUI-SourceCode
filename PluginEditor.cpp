@@ -42,6 +42,9 @@ InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceT
 
     addAndMakeVisible(audioProcessor.waveViewerPost);
     audioProcessor.waveViewerPost.setColours(MyColours::green, MyColours::green);
+
+    addAndMakeVisible(button);
+    button.setButtonText("X");
 }
 
 void InterfaceTestAudioProcessorEditor::initWindow()
@@ -59,7 +62,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
 {
     addAndMakeVisible(reverbDial1);
     reverbDial1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    reverbDial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
+    reverbDial1.setTextBoxStyle(juce::Slider::NoTextBox, false, 40, 20);
     reverbDial1.setRange(0.0, 100.0, 0.1);
     reverbDial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     reverbDial1.setLookAndFeel(&myLookAndFeel);
@@ -67,7 +70,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
 
     addAndMakeVisible(reverbDial2);
     reverbDial2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    reverbDial2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    reverbDial2.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
     reverbDial2.setRange(0.0, 100.0, 0.1);
     reverbDial2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     reverbDial2.setLookAndFeel(&myLookAndFeel);
@@ -75,7 +78,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
 
     addAndMakeVisible(DistoDial);
     DistoDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    DistoDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    DistoDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
     DistoDial.setRange(0.0, 100.0, 0.1);
     DistoDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     DistoDial.setLookAndFeel(&myLookAndFeel);
@@ -83,11 +86,16 @@ void InterfaceTestAudioProcessorEditor::initDials()
 
     addAndMakeVisible(filterSlider);
     filterSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
-    filterSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    filterSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
     filterSlider.setRange(0.0, 100.0, 0.1);
-    filterSlider.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     filterSlider.setLookAndFeel(&myLookAndFeel);
-    filterSlider.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+
+    addAndMakeVisible(doubleSlider);
+    doubleSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
+    doubleSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    doubleSlider.setMinValue(0.0f, juce::NotificationType::dontSendNotification, false);
+    doubleSlider.setMaxValue(100.0f, juce::NotificationType::dontSendNotification, false);
+    doubleSlider.setLookAndFeel(&myLookAndFeel);
 
     /*
     addAndMakeVisible(filterSlider);
@@ -103,7 +111,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
 
     addAndMakeVisible(LFODial);
     LFODial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    LFODial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    LFODial.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
     LFODial.setRange(0.0, 100.0, 0.1);
     LFODial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::green);
     LFODial.setLookAndFeel(&myLookAndFeel);
@@ -187,27 +195,9 @@ void InterfaceTestAudioProcessorEditor::resized()
     audioProcessor.waveViewerPost.setBounds(sectionLFO.getX() + 0.1 * sectionLFO.getWidth(), LFODial.getBottom() + 0.1 * sectionLFO.getHeight(), 0.8 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
     //audioProcessor.waveViewerPost.setTransform(juce::AffineTransform::rotation(juce::MathConstants<float>::pi / 2.0f));
     
-    filterSlider.setBounds(sectionFilter.getX() + 0.2 * sectionFilter.getWidth(), sectionFilter.getY() + 0.25 * sectionFilter.getHeight(), 0.6 * sectionFilter.getWidth(), 0.5 * sectionFilter.getHeight());
+    //filterSlider.setBounds(sectionFilter.getX() + 0.2 * sectionFilter.getWidth(), sectionFilter.getY() + 0.25 * sectionFilter.getHeight(), 0.6 * sectionFilter.getWidth(), 0.5 * sectionFilter.getHeight());
 
-    /*
+    doubleSlider.setBounds(sectionFilter.getX() + 0.2 * sectionFilter.getWidth(), sectionFilter.getY() + 0.25 * sectionFilter.getHeight(), 0.6 * sectionFilter.getWidth(), 0.2 * sectionFilter.getHeight());
 
-    sectionGraph.setBounds(    margin + blockW + blockSep,
-                                top + blockH + 0.5 * blockSep,
-                             2 * blockW + blockSep,
-                            FilterH);
-
-    /*
-
-
-    DistoDial.setBounds(margin + 2 * blockW + 2 * blockSep + 0.5f * (blockW - dialSize), top + 0.5f * (blockH - dialSize), dialSize, dialSize);
-    
-    filterDial1.setBounds(margin + 0.5f * (blockW - 2.0f * dialSizeSmall), top + blockH + margin, dialSizeSmall, dialSizeSmall);
-    filterDial2.setBounds(margin + 0.5f * (blockW - 2.0f * dialSizeSmall) + dialSizeSmall, top + blockH + margin, dialSizeSmall, dialSizeSmall);
-
-    LFODial.setBounds(margin + 3 * blockW + 3 * blockSep + 0.5f * (blockW - dialSize), top + 0.5f * (blockH - dialSize), dialSize, dialSize);
-
-    audioProcessor.waveViewerPre.setBounds(1.1 * sectionGraph.getX(), 1.1 * sectionGraph.getY(), 0.88 * sectionGraph.getWidth(), 0.3f * sectionGraph.getHeight());
-    audioProcessor.waveViewerPost.setBounds(1.1 * sectionGraph.getX(), 1.1 * sectionGraph.getY() + 0.4f * sectionGraph.getHeight(), audioProcessor.waveViewerPre.getWidth(), audioProcessor.waveViewerPre.getHeight());
-    */
-
+    button.setBounds(1.3f * sectionAtmosphere.getX(), 1.3f * sectionAtmosphere.getY(), 0.1 * sectionAtmosphere.getWidth(), 0.1 * sectionAtmosphere.getWidth());
 }

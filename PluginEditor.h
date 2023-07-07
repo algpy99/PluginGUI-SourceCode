@@ -94,28 +94,65 @@ public:
 
     }
 
-    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle, juce::Slider& slider) override
+    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle style, juce::Slider& slider) override
     {
-        auto bounds = juce::Rectangle<float>(x, y, width, height);
+        if (style == juce::Slider::LinearHorizontal)
+        {
+            auto bounds = juce::Rectangle<float>(x, y, width, height);
 
-        juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.3f * bounds.getHeight()};
-        g.setColour(MyColours::vitalGrey);
-        g.fillRoundedRectangle(sliderOuterPath, 0.2f);
-
-        
-        juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos, 0.3f * bounds.getHeight() };
-        g.setColour(MyColours::orange);
-        g.fillRoundedRectangle(sliderPath, 0.2f);
-        
-
-        juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.4f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.3f * bounds.getHeight() };
-        g.setColour(MyColours::orange);
-
-        if (sliderPos == bounds.getX())
-        { 
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.3f * bounds.getHeight() };
             g.setColour(MyColours::vitalGrey);
+            g.fillRoundedRectangle(sliderOuterPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos - bounds.getX(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+            g.fillRoundedRectangle(sliderPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.4f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+
+            if (sliderPos == bounds.getX())
+            {
+                g.setColour(MyColours::vitalGrey);
+            }
+            g.fillRoundedRectangle(sliderThumb, 0.2f);
         }
-        g.fillRoundedRectangle(sliderThumb, 0.2f);
+
+        if (style == juce::Slider::TwoValueHorizontal)
+        {
+            auto bounds = juce::Rectangle<float>(x, y, width, height);
+
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
+            g.setColour(MyColours::vitalGrey);
+            g.fillRoundedRectangle(sliderOuterPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderPath{ minSliderPos, bounds.getY(), maxSliderPos - minSliderPos, 0.4f * bounds.getHeight()};
+            g.setColour(MyColours::orange);
+            g.fillRoundedRectangle(sliderPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+
+            if (minSliderPos == bounds.getX())
+            {
+                g.setColour(MyColours::vitalGrey);
+            }
+            g.fillRoundedRectangle(sliderMin, 0.2f);
+
+            juce::Rectangle<float> sliderMax{ maxSliderPos - 0.02f * bounds.getWidth(), bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+
+            if (sliderMax.getRight() == bounds.getRight())
+            {
+                g.setColour(MyColours::vitalGrey);
+            }
+            g.fillRoundedRectangle(sliderMax, 0.2f);
+        }
+
 
     }
 };
@@ -155,6 +192,7 @@ private:
     juce::Slider filterDial2;
     juce::Slider LFODial;
 
+    juce::Slider doubleSlider;
 
     juce::GroupComponent sectionAtmosphere;
     juce::GroupComponent sectionDrive;
@@ -162,6 +200,8 @@ private:
 
     juce::GroupComponent sectionLFO;
     juce::GroupComponent sectionGraph;
+
+    juce::TextButton button;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
