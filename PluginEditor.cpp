@@ -81,21 +81,25 @@ void InterfaceTestAudioProcessorEditor::initDials()
     DistoDial.setLookAndFeel(&myLookAndFeel);
     DistoDial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
-    addAndMakeVisible(filterDial1);
-    filterDial1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterDial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
-    filterDial1.setRange(0.0, 100.0, 0.1);
-    filterDial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
-    filterDial1.setLookAndFeel(&myLookAndFeel);
-    filterDial1.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+    addAndMakeVisible(filterSlider);
+    filterSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    filterSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
+    filterSlider.setRange(0.0, 100.0, 0.1);
+    filterSlider.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
+    filterSlider.setLookAndFeel(&myLookAndFeel);
+    filterSlider.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
-    addAndMakeVisible(filterDial2);
-    filterDial2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterDial2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
-    filterDial2.setRange(0.0, 100.0, 0.1);
-    filterDial2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
-    filterDial2.setLookAndFeel(&myLookAndFeel);
-    filterDial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+    /*
+    addAndMakeVisible(filterSlider);
+    filterSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
+    filterSlider.setRange(22.0, 22000.0, 0.1);
+    filterSlider.setMinAndMaxValues(22.0, 22000.0, juce::NotificationType::dontSendNotification);
+    DistoDial.setLookAndFeel(&myLookAndFeel);
+    */
+    
+    //filterSlider.setMinValue(20.0f, juce::NotificationType::dontSendNotification, false);
+    //filterSlider.setMaxValue(22000.0f, juce::NotificationType::dontSendNotification, false);
+
 
     addAndMakeVisible(LFODial);
     LFODial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -183,6 +187,8 @@ void InterfaceTestAudioProcessorEditor::resized()
     audioProcessor.waveViewerPost.setBounds(sectionLFO.getX() + 0.1 * sectionLFO.getWidth(), LFODial.getBottom() + 0.1 * sectionLFO.getHeight(), 0.8 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
     //audioProcessor.waveViewerPost.setTransform(juce::AffineTransform::rotation(juce::MathConstants<float>::pi / 2.0f));
     
+    filterSlider.setBounds(sectionFilter.getX() + 0.2 * sectionFilter.getWidth(), sectionFilter.getY() + 0.25 * sectionFilter.getHeight(), 0.6 * sectionFilter.getWidth(), 0.5 * sectionFilter.getHeight());
+
     /*
 
     sectionGraph.setBounds(    margin + blockW + blockSep,

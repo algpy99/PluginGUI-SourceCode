@@ -25,7 +25,7 @@ public:
         auto outline = slider.findColour(juce::Slider::rotarySliderOutlineColourId);
         auto fill = slider.findColour(juce::Slider::rotarySliderFillColourId);
 
-        auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat().reduced(10);
+        auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat();
 
         auto centre = bounds.getCentre();
 
@@ -90,6 +90,33 @@ public:
         
         /** Dial tick thickness*/
         g.strokePath(dialTick, juce::PathStrokeType(lineW * 0.6, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+
+
+    }
+
+    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle, juce::Slider& slider) override
+    {
+        auto bounds = juce::Rectangle<float>(x, y, width, height);
+
+        juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.3f * bounds.getHeight()};
+        g.setColour(MyColours::vitalGrey);
+        g.fillRoundedRectangle(sliderOuterPath, 0.2f);
+
+        
+        juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos, 0.3f * bounds.getHeight() };
+        g.setColour(MyColours::orange);
+        g.fillRoundedRectangle(sliderPath, 0.2f);
+        
+
+        juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.4f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.3f * bounds.getHeight() };
+        g.setColour(MyColours::orange);
+
+        if (sliderPos == bounds.getX())
+        { 
+            g.setColour(MyColours::vitalGrey);
+        }
+        g.fillRoundedRectangle(sliderThumb, 0.2f);
+
     }
 };
 
@@ -121,6 +148,9 @@ private:
     juce::Slider reverbDial1;
     juce::Slider reverbDial2;
     juce::Slider DistoDial;
+
+    juce::Slider filterSlider;
+
     juce::Slider filterDial1;
     juce::Slider filterDial2;
     juce::Slider LFODial;
