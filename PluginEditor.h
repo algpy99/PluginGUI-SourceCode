@@ -17,15 +17,22 @@ class MyLookAndFeel : public juce::LookAndFeel_V4
 public:
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider) override
     {
+        auto rotaryParams = slider.getRotaryParameters();
+        rotaryParams.startAngleRadians = juce::MathConstants<float>::pi * 1.15f;
+        rotaryParams.endAngleRadians = juce::MathConstants<float>::pi * 2.85f;
+        slider.setRotaryParameters(rotaryParams);
+
         auto outline = slider.findColour(juce::Slider::rotarySliderOutlineColourId);
         auto fill = slider.findColour(juce::Slider::rotarySliderFillColourId);
 
-        auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat().reduced(10);
+        auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat();
+
+        auto centre = bounds.getCentre();
 
         auto radius = juce::jmin(width, height) / 2.0f;
         auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
         auto lineW = 0.4f * juce::jmin(radius * 0.2f, radius * 0.5f);
-        auto arcRadius = radius - lineW;
+        auto arcRadius = radius;
 
 
         juce::Path buttonBackground;
@@ -34,11 +41,11 @@ public:
             arcRadius,
             arcRadius,
             0.0f,
-            juce::MathConstants<float>::pi * 1.0f,
-            juce::MathConstants<float>::pi * 3.0f,
+            rotaryStartAngle,
+            rotaryEndAngle,
             true);
-        g.setColour(MyColours::vitalMidGrey);
-        g.fillPath(buttonBackground);
+        g.setColour(MyColours::vitalGrey);
+        //g.fillPath(buttonBackground);
 
         juce::Path backgroundArc;
         backgroundArc.addCentredArc(bounds.getCentreX(),
@@ -51,7 +58,7 @@ public:
             true);
 
         g.setColour(MyColours::vitalGrey);
-        g.strokePath(backgroundArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+        g.strokePath(backgroundArc, juce::PathStrokeType(lineW));
 
         if (slider.isEnabled())
         {
@@ -66,14 +73,87 @@ public:
                 true);
 
             g.setColour(fill);
-            g.strokePath(valueArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+            g.strokePath(valueArc, juce::PathStrokeType(lineW));
         }
 
-        juce::Point<float> thumbPoint(  bounds.getCentreX() + (arcRadius - 1.7 * lineW) * std::cos(toAngle - juce::MathConstants<float>::halfPi),
-                                        bounds.getCentreY() + (arcRadius - 1.7 * lineW) * std::sin(toAngle - juce::MathConstants<float>::halfPi));
+        juce::Path dialTick;
+        dialTick.startNewSubPath(centre.getPointOnCircumference(0.45 * radius, toAngle));
+        g.setColour(fill);
         
-        g.setColour(MyColours::cream);
-        g.drawLine(backgroundArc.getBounds().getCentreX(), backgroundArc.getBounds().getCentreY(), thumbPoint.getX(), thumbPoint.getY(), lineW * 1.2);
+        if (toAngle == rotaryStartAngle)
+        {
+            g.setColour(MyColours::vitalGrey);
+        }
+        
+        /** Dial tick length*/
+        dialTick.lineTo(centre.getPointOnCircumference(0.65 * radius, toAngle));
+        
+        /** Dial tick thickness*/
+        g.strokePath(dialTick, juce::PathStrokeType(lineW * 0.6, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+
+
+    }
+
+    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle style, juce::Slider& slider) override
+    {
+        if (style == juce::Slider::LinearHorizontal)
+        {
+            auto bounds = juce::Rectangle<float>(x, y, width, height);
+
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::vitalGrey);
+            g.fillRoundedRectangle(sliderOuterPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos - bounds.getX(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+            g.fillRoundedRectangle(sliderPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.4f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+
+            if (sliderPos == bounds.getX())
+            {
+                g.setColour(MyColours::vitalGrey);
+            }
+            g.fillRoundedRectangle(sliderThumb, 0.2f);
+        }
+
+        if (style == juce::Slider::TwoValueHorizontal)
+        {
+            auto bounds = juce::Rectangle<float>(x, y, width, height);
+
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
+            g.setColour(MyColours::vitalGrey);
+            g.fillRoundedRectangle(sliderOuterPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderPath{ minSliderPos, bounds.getY(), maxSliderPos - minSliderPos, 0.4f * bounds.getHeight()};
+            g.setColour(MyColours::orange);
+            g.fillRoundedRectangle(sliderPath, 0.2f);
+
+
+            juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+
+            if (minSliderPos == bounds.getX())
+            {
+                g.setColour(MyColours::vitalGrey);
+            }
+            g.fillRoundedRectangle(sliderMin, 0.2f);
+
+            juce::Rectangle<float> sliderMax{ maxSliderPos - 0.02f * bounds.getWidth(), bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            g.setColour(MyColours::orange);
+
+            if (sliderMax.getRight() == bounds.getRight())
+            {
+                g.setColour(MyColours::vitalGrey);
+            }
+            g.fillRoundedRectangle(sliderMax, 0.2f);
+        }
+
+
     }
 };
 
@@ -105,10 +185,14 @@ private:
     juce::Slider reverbDial1;
     juce::Slider reverbDial2;
     juce::Slider DistoDial;
+
+    juce::Slider filterSlider;
+
     juce::Slider filterDial1;
     juce::Slider filterDial2;
     juce::Slider LFODial;
 
+    juce::Slider doubleSlider;
 
     juce::GroupComponent sectionAtmosphere;
     juce::GroupComponent sectionDrive;
@@ -116,6 +200,8 @@ private:
 
     juce::GroupComponent sectionLFO;
     juce::GroupComponent sectionGraph;
+
+    juce::TextButton button;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
