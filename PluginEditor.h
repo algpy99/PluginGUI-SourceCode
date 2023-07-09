@@ -192,6 +192,8 @@ private:
     juce::Rectangle<float> sectionMix;
     juce::Rectangle<float> bottomBorder;
 
+    juce::Rectangle<float> lineFX;
+
     juce::Slider reverbDial1;
     juce::Slider reverbDial2;
     juce::Slider DistoDial;
