@@ -100,18 +100,18 @@ public:
         {
             auto bounds = juce::Rectangle<float>(x, y, width, height);
 
-            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.3f * bounds.getHeight() };
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
             g.setColour(MyColours::vitalGrey);
             g.fillRoundedRectangle(sliderOuterPath, 0.2f);
 
 
-            juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos - bounds.getX(), 0.3f * bounds.getHeight() };
-            g.setColour(MyColours::orange);
+            juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos - bounds.getX(), 0.4f * bounds.getHeight() };
+            g.setColour(MyColours::green);
             g.fillRoundedRectangle(sliderPath, 0.2f);
 
 
-            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.4f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.3f * bounds.getHeight() };
-            g.setColour(MyColours::orange);
+            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            g.setColour(MyColours::green);
 
             if (sliderPos == bounds.getX())
             {
@@ -177,29 +177,27 @@ private:
 
     MyLookAndFeel myLookAndFeel;
 
+    juce::Image background;
+
     void initWindow();
     void initDials();
 
-    void InterfaceTestAudioProcessorEditor::changeSectionColor();
+    float top;
+    float margin;
+    float separation;
+
+    juce::Rectangle<float> topBorder;
+    juce::Rectangle<float> sectionFX;
+    juce::Rectangle<float> sectionLFO;
+    juce::Rectangle<float> sectionMix;
+    juce::Rectangle<float> bottomBorder;
 
     juce::Slider reverbDial1;
     juce::Slider reverbDial2;
     juce::Slider DistoDial;
-
     juce::Slider filterSlider;
-
-    juce::Slider filterDial1;
-    juce::Slider filterDial2;
     juce::Slider LFODial;
-
     juce::Slider doubleSlider;
-
-    juce::GroupComponent sectionAtmosphere;
-    juce::GroupComponent sectionDrive;
-    juce::GroupComponent sectionFilter;
-
-    juce::GroupComponent sectionLFO;
-    juce::GroupComponent sectionGraph;
 
     juce::TextButton button;
 
