@@ -36,24 +36,24 @@ void InterfaceTestAudioProcessorEditor::initDials()
 {
     addAndMakeVisible(reverbDial1);
     reverbDial1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    reverbDial1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-    reverbDial1.setRange(0.0, 100.0, 0.1);
+    reverbDial1.setTextBoxStyle(juce::Slider::NoTextBox, false, 40, 20);
+    reverbDial1.setRange(0.0, 100.0, 1.0);
     reverbDial1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     reverbDial1.setLookAndFeel(&myLookAndFeel);
     reverbDial1.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
     addAndMakeVisible(reverbDial2);
     reverbDial2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    reverbDial2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
-    reverbDial2.setRange(0.0, 100.0, 0.1);
+    reverbDial2.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
+    reverbDial2.setRange(0.0, 100.0, 1.0);
     reverbDial2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     reverbDial2.setLookAndFeel(&myLookAndFeel);
     reverbDial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
     addAndMakeVisible(DistoDial);
     DistoDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    DistoDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 20);
-    DistoDial.setRange(0.0, 100.0, 0.1);
+    DistoDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
+    DistoDial.setRange(0.0, 100.0, 1.0);
     DistoDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     DistoDial.setLookAndFeel(&myLookAndFeel);
     DistoDial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
@@ -61,7 +61,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     addAndMakeVisible(filterSlider);
     filterSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     filterSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
-    filterSlider.setRange(0.0, 100.0, 0.1);
+    filterSlider.setRange(0.0, 100.0, 1.0);
     filterSlider.setLookAndFeel(&myLookAndFeel);
 
     addAndMakeVisible(doubleSlider);
@@ -74,7 +74,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     addAndMakeVisible(LFODial);
     LFODial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     LFODial.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
-    LFODial.setRange(0.0, 100.0, 0.1);
+    LFODial.setRange(0.0, 100.0, 1.0);
     LFODial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::green);
     LFODial.setLookAndFeel(&myLookAndFeel);
     LFODial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
@@ -87,28 +87,16 @@ void InterfaceTestAudioProcessorEditor::initDials()
     addAndMakeVisible(buttonSine);
     buttonSine.setButtonText("Sine");
     buttonSine.setClickingTogglesState(true);
-    buttonSine.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
-    buttonSine.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
-    buttonSine.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
-    buttonSine.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
     buttonSine.setLookAndFeel(&myLookAndFeel);
 
     addAndMakeVisible(buttonSaw);
     buttonSaw.setButtonText("Saw");
     buttonSaw.setClickingTogglesState(true);
-    buttonSaw.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
-    buttonSaw.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
-    buttonSaw.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
-    buttonSaw.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
     buttonSaw.setLookAndFeel(&myLookAndFeel);
 
     addAndMakeVisible(buttonSquare);
     buttonSquare.setButtonText("Square");
     buttonSquare.setClickingTogglesState(true);
-    buttonSquare.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
-    buttonSquare.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
-    buttonSquare.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
-    buttonSquare.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
     buttonSquare.setLookAndFeel(&myLookAndFeel);
 
     buttonSine.setRadioGroupId(Waves);
@@ -141,9 +129,9 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     bottomBorder = { 1.0f * getX(), sectionLFO.getBottom() + margin,  1.0f * getWidth(), 0.5f * top};
 
     // DIALS BOUNDS
-    reverbDial1.setBounds(sectionFX.getX() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
-    reverbDial2.setBounds(reverbDial1.getRight() + 0.03 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
-    DistoDial.setBounds(reverbDial2.getRight() + 0.03 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
+    reverbDial1.setBounds(sectionFX.getX() + 0.16 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
+    reverbDial2.setBounds(reverbDial1.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
+    DistoDial.setBounds(reverbDial2.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
 
     buttonSine.setBounds(sectionLFO.getX() + 0.15 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
     buttonSaw.setBounds(buttonSine.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());

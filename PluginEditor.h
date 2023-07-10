@@ -17,6 +17,7 @@ class MyLookAndFeel : public juce::LookAndFeel_V4
 public:
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider) override
     {
+        slider.setDoubleClickReturnValue(true, 0.0);
         auto rotaryParams = slider.getRotaryParameters();
         rotaryParams.startAngleRadians = juce::MathConstants<float>::pi * 1.15f;
         rotaryParams.endAngleRadians = juce::MathConstants<float>::pi * 2.85f;
@@ -33,7 +34,6 @@ public:
         auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
         auto lineW = 0.4f * juce::jmin(radius * 0.2f, radius * 0.5f);
         auto arcRadius = radius;
-
 
         juce::Path buttonBackground;
         buttonBackground.addCentredArc(bounds.getCentreX(),
@@ -84,13 +84,30 @@ public:
         {
             g.setColour(MyColours::vitalMidGrey);
         }
-        
-        /** Dial tick length*/
+
         dialTick.lineTo(centre.getPointOnCircumference(0.65 * radius, toAngle));
-        
-        /** Dial tick thickness*/
         g.strokePath(dialTick, juce::PathStrokeType(lineW * 0.6, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 
+        // Custom value display
+        juce::String valueString = slider.getTextFromValue(slider.getValue());
+        float fontSize = 0.2f * juce::jmin(width, height);
+        if (juce::jmin(width, height) > 120)
+        {
+            fontSize = 0.1f * juce::jmin(width, height);
+        }
+        juce::Font font;
+        font.setHeight(fontSize);
+        g.setFont(font);
+        int textWidth = font.getStringWidth(valueString);
+        int centerX = x + (width - textWidth) / 2;
+        int centerY = y + (height - font.getHeight()) / 2;
+        g.setColour(fill);
+        if (toAngle == rotaryStartAngle)
+        {
+            g.setColour(MyColours::vitalMidGrey);
+        }
+
+        g.drawText(valueString, centerX, centerY, textWidth, font.getHeight(), juce::Justification::centred, false);
 
     }
 
@@ -113,10 +130,12 @@ public:
             juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
             g.setColour(MyColours::green);
 
+            
             if (sliderPos == bounds.getX())
             {
                 g.setColour(MyColours::vitalMidGrey);
             }
+            
             g.fillRoundedRectangle(sliderThumb, 0.2f);
         }
 
@@ -137,19 +156,23 @@ public:
             juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
             g.setColour(MyColours::orange);
 
+            
             if (minSliderPos == bounds.getX())
             {
                 g.setColour(MyColours::vitalMidGrey);
             }
+            
             g.fillRoundedRectangle(sliderMin, 0.2f);
 
             juce::Rectangle<float> sliderMax{ maxSliderPos - 0.01f * bounds.getWidth(), bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
             g.setColour(MyColours::orange);
 
+            
             if (sliderMax.getRight() == bounds.getRight())
             {
                 g.setColour(MyColours::vitalGrey);
             }
+            
             g.fillRoundedRectangle(sliderMax, 0.2f);
         }
     }
@@ -157,9 +180,11 @@ public:
     void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour, bool, bool isButtonDown) override
     {
         auto buttonArea = button.getLocalBounds();
-        //auto buttonArea = juce::Rectangle<float> (1.0f * button.getX(), 1.0f * button.getY(), 1.0f * button.getWidth(), 1.0f * button.getHeight());
+        button.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
+        button.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
+        button.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+        button.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
         g.setColour(backgroundColour);
-        //g.setCornerRadius
         g.fillRect(buttonArea);
     }
 };
@@ -167,7 +192,7 @@ public:
 //==============================================================================
 /**
 */
-class InterfaceTestAudioProcessorEditor  : public juce::AudioProcessorEditor
+class InterfaceTestAudioProcessorEditor  : public juce::AudioProcessorEditor//, juce::AudioProcessorEditor::Listener
 {
 public:
     InterfaceTestAudioProcessorEditor (InterfaceTestAudioProcessor&);
