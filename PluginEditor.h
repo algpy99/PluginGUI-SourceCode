@@ -137,6 +137,21 @@ public:
             }
             
             g.fillRoundedRectangle(sliderThumb, 0.2f);
+
+            // Custom value display
+            juce::String valueString = slider.getTextFromValue(slider.getValue());
+            float fontSize = 0.65f * juce::jmin(width, height);
+            juce::Font font;
+            font.setHeight(fontSize);
+            g.setFont(font);
+            int textWidth = font.getStringWidth(valueString);
+            g.setColour(MyColours::cream);
+            if (sliderPos == bounds.getX())
+            {
+                g.setColour(MyColours::vitalMidGrey);
+            }
+            g.drawText(valueString, x, y, textWidth, font.getHeight(), juce::Justification::centred, false);
+
         }
 
         if (style == juce::Slider::TwoValueHorizontal)
@@ -174,6 +189,29 @@ public:
             }
             
             g.fillRoundedRectangle(sliderMax, 0.2f);
+
+            // Custom value display
+            juce::String minValueString = slider.getTextFromValue(slider.getMinValue());
+            float fontSize = 0.65f * juce::jmin(width, height);
+            juce::Font font;
+            font.setHeight(fontSize);
+            g.setFont(font);
+            int textWidth = font.getStringWidth(minValueString);
+            g.setColour(MyColours::cream);
+            if (minSliderPos == bounds.getX())
+            {
+                g.setColour(MyColours::vitalMidGrey);
+            }
+            g.drawText(minValueString, 0, y, textWidth, font.getHeight(), juce::Justification::centred, false);
+
+            juce::String maxValueString = slider.getTextFromValue(slider.getMaxValue());
+            g.setColour(MyColours::cream);
+            if (sliderMax.getRight() == bounds.getRight())
+            {
+                g.setColour(MyColours::vitalMidGrey);
+            }
+            g.drawText(maxValueString, bounds.getRight() - 0.01f * bounds.getWidth(), y, textWidth, font.getHeight(), juce::Justification::centred, false);
+
         }
     }
 

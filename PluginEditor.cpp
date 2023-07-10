@@ -67,6 +67,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     addAndMakeVisible(doubleSlider);
     doubleSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
     doubleSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    //doubleSlider.setRange(0.0, 100.0, 1.0);
     doubleSlider.setMinValue(0.0f, juce::NotificationType::dontSendNotification, false);
     doubleSlider.setMaxValue(100.0f, juce::NotificationType::dontSendNotification, false);
     doubleSlider.setLookAndFeel(&myLookAndFeel);
