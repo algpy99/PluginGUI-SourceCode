@@ -201,7 +201,24 @@ private:
     juce::Slider LFODial;
     juce::Slider doubleSlider;
 
-    juce::TextButton button;
+
+
+    juce::TextButton buttonSine;
+    juce::TextButton buttonSaw;
+    juce::TextButton buttonSquare;
+
+    enum RadioButtonIds
+    {
+        Waves = 1001
+    };
+
+
+
+    /*
+    juce::TextButton buttonSine;
+    juce::TextButton buttonSaw;
+    juce::TextButton buttonSquare;
+    */
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };

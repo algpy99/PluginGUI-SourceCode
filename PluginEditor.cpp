@@ -80,6 +80,28 @@ void InterfaceTestAudioProcessorEditor::initDials()
     audioProcessor.waveViewerPre.setColours(MyColours::vitalGrey, MyColours::orange);
     addAndMakeVisible(audioProcessor.waveViewerPost);
     audioProcessor.waveViewerPost.setColours(MyColours::vitalGrey, MyColours::green);
+
+    addAndMakeVisible(buttonSine);
+    buttonSine.setButtonText("Sine");
+    buttonSine.setClickingTogglesState(true);
+    buttonSine.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::green);
+    buttonSine.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+
+    addAndMakeVisible(buttonSaw);
+    buttonSaw.setButtonText("Saw");
+    buttonSaw.setClickingTogglesState(true);
+    buttonSaw.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::green);
+    buttonSaw.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+
+    addAndMakeVisible(buttonSquare);
+    buttonSquare.setButtonText("Square");
+    buttonSquare.setClickingTogglesState(true);
+    buttonSquare.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::green);
+    buttonSquare.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+
+    buttonSine.setRadioGroupId(Waves);
+    buttonSaw.setRadioGroupId(Waves);
+    buttonSquare.setRadioGroupId(Waves);
 }
 
 InterfaceTestAudioProcessorEditor::~InterfaceTestAudioProcessorEditor()
@@ -92,6 +114,8 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     // BACKGROUND
     background = juce::ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
     g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+
+    //g.fillAll(MyColours::vitalMidGrey);
 
     // SECTIONS
     top = getHeight() * 0.1f;
@@ -108,10 +132,16 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     reverbDial1.setBounds(sectionFX.getX() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     reverbDial2.setBounds(reverbDial1.getRight() + 0.03 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     DistoDial.setBounds(reverbDial2.getRight() + 0.03 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
+
+    buttonSine.setBounds(sectionLFO.getX() + 0.15 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
+    buttonSaw.setBounds(buttonSine.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
+    buttonSquare.setBounds(buttonSaw.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
+
     filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.1 * sectionLFO.getHeight());
     doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.1 * sectionLFO.getHeight());
     LFODial.setBounds(sectionMix.getX() + 0.15 * sectionMix.getWidth(), sectionMix.getY() + separation, 0.7 * sectionMix.getWidth(), 0.7 * sectionMix.getWidth());
     audioProcessor.waveViewerPre.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
+    
     //audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, audioProcessor.waveViewerPre.getBottom() + separation, sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
 
     /*
