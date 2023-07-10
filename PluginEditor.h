@@ -44,7 +44,7 @@ public:
             rotaryStartAngle,
             rotaryEndAngle,
             true);
-        g.setColour(MyColours::vitalGrey);
+        g.setColour(MyColours::vitalMidGrey);
         //g.fillPath(buttonBackground);
 
         juce::Path backgroundArc;
@@ -57,7 +57,7 @@ public:
             rotaryEndAngle,
             true);
 
-        g.setColour(MyColours::vitalGrey);
+        g.setColour(MyColours::vitalMidGrey);
         g.strokePath(backgroundArc, juce::PathStrokeType(lineW));
 
         if (slider.isEnabled())
@@ -82,7 +82,7 @@ public:
         
         if (toAngle == rotaryStartAngle)
         {
-            g.setColour(MyColours::vitalGrey);
+            g.setColour(MyColours::vitalMidGrey);
         }
         
         /** Dial tick length*/
@@ -101,7 +101,7 @@ public:
             auto bounds = juce::Rectangle<float>(x, y, width, height);
 
             juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
-            g.setColour(MyColours::vitalGrey);
+            g.setColour(MyColours::vitalMidGrey);
             g.fillRoundedRectangle(sliderOuterPath, 0.2f);
 
 
@@ -110,12 +110,12 @@ public:
             g.fillRoundedRectangle(sliderPath, 0.2f);
 
 
-            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
             g.setColour(MyColours::green);
 
             if (sliderPos == bounds.getX())
             {
-                g.setColour(MyColours::vitalGrey);
+                g.setColour(MyColours::vitalMidGrey);
             }
             g.fillRoundedRectangle(sliderThumb, 0.2f);
         }
@@ -125,7 +125,7 @@ public:
             auto bounds = juce::Rectangle<float>(x, y, width, height);
 
             juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
-            g.setColour(MyColours::vitalGrey);
+            g.setColour(MyColours::vitalMidGrey);
             g.fillRoundedRectangle(sliderOuterPath, 0.2f);
 
 
@@ -134,16 +134,16 @@ public:
             g.fillRoundedRectangle(sliderPath, 0.2f);
 
 
-            juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
             g.setColour(MyColours::orange);
 
             if (minSliderPos == bounds.getX())
             {
-                g.setColour(MyColours::vitalGrey);
+                g.setColour(MyColours::vitalMidGrey);
             }
             g.fillRoundedRectangle(sliderMin, 0.2f);
 
-            juce::Rectangle<float> sliderMax{ maxSliderPos - 0.02f * bounds.getWidth(), bounds.getY() + 0.5f * bounds.getHeight(), 0.02f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            juce::Rectangle<float> sliderMax{ maxSliderPos - 0.01f * bounds.getWidth(), bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
             g.setColour(MyColours::orange);
 
             if (sliderMax.getRight() == bounds.getRight())
@@ -152,8 +152,15 @@ public:
             }
             g.fillRoundedRectangle(sliderMax, 0.2f);
         }
+    }
 
-
+    void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour, bool, bool isButtonDown) override
+    {
+        auto buttonArea = button.getLocalBounds();
+        //auto buttonArea = juce::Rectangle<float> (1.0f * button.getX(), 1.0f * button.getY(), 1.0f * button.getWidth(), 1.0f * button.getHeight());
+        g.setColour(backgroundColour);
+        //g.setCornerRadius
+        g.fillRect(buttonArea);
     }
 };
 
@@ -201,8 +208,6 @@ private:
     juce::Slider LFODial;
     juce::Slider doubleSlider;
 
-
-
     juce::TextButton buttonSine;
     juce::TextButton buttonSaw;
     juce::TextButton buttonSquare;
@@ -211,8 +216,6 @@ private:
     {
         Waves = 1001
     };
-
-
 
     /*
     juce::TextButton buttonSine;

@@ -15,7 +15,10 @@ InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceT
 {
     
     initWindow();
+
+    buttonSine.setToggleState(true, juce::NotificationType::dontSendNotification);
     initDials();
+
 }
 
 void InterfaceTestAudioProcessorEditor::initWindow()
@@ -77,27 +80,36 @@ void InterfaceTestAudioProcessorEditor::initDials()
     LFODial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
     addAndMakeVisible(audioProcessor.waveViewerPre);
-    audioProcessor.waveViewerPre.setColours(MyColours::vitalGrey, MyColours::orange);
+    audioProcessor.waveViewerPre.setColours(MyColours::vitalMidGrey, MyColours::orange);
     addAndMakeVisible(audioProcessor.waveViewerPost);
-    audioProcessor.waveViewerPost.setColours(MyColours::vitalGrey, MyColours::green);
+    audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::green);
 
     addAndMakeVisible(buttonSine);
     buttonSine.setButtonText("Sine");
     buttonSine.setClickingTogglesState(true);
-    buttonSine.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::green);
+    buttonSine.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
+    buttonSine.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
     buttonSine.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+    buttonSine.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
+    buttonSine.setLookAndFeel(&myLookAndFeel);
 
     addAndMakeVisible(buttonSaw);
     buttonSaw.setButtonText("Saw");
     buttonSaw.setClickingTogglesState(true);
-    buttonSaw.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::green);
+    buttonSaw.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
+    buttonSaw.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
     buttonSaw.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+    buttonSaw.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
+    buttonSaw.setLookAndFeel(&myLookAndFeel);
 
     addAndMakeVisible(buttonSquare);
     buttonSquare.setButtonText("Square");
     buttonSquare.setClickingTogglesState(true);
-    buttonSquare.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::green);
+    buttonSquare.setColour(juce::TextButton::ColourIds::buttonOnColourId, MyColours::vitalMidGrey);
+    buttonSquare.setColour(juce::TextButton::ColourIds::textColourOnId, MyColours::green);
     buttonSquare.setColour(juce::TextButton::ColourIds::buttonColourId, MyColours::vitalMidGrey);
+    buttonSquare.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
+    buttonSquare.setLookAndFeel(&myLookAndFeel);
 
     buttonSine.setRadioGroupId(Waves);
     buttonSaw.setRadioGroupId(Waves);
