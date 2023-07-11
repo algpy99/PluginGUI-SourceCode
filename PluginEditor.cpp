@@ -67,9 +67,9 @@ void InterfaceTestAudioProcessorEditor::initDials()
     addAndMakeVisible(doubleSlider);
     doubleSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
     doubleSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    //doubleSlider.setRange(0.0, 100.0, 1.0);
-    doubleSlider.setMinValue(0.0f, juce::NotificationType::dontSendNotification, false);
-    doubleSlider.setMaxValue(100.0f, juce::NotificationType::dontSendNotification, false);
+    doubleSlider.setRange(0.0, 100.0, 1.0);
+    doubleSlider.setMinValue(0.0);
+    doubleSlider.setMaxValue(100.0);
     doubleSlider.setLookAndFeel(&myLookAndFeel);
 
     addAndMakeVisible(LFODial);
@@ -138,8 +138,8 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     buttonSaw.setBounds(buttonSine.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
     buttonSquare.setBounds(buttonSaw.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
 
-    filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.1 * sectionLFO.getHeight());
-    doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.1 * sectionLFO.getHeight());
+    filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
+    doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
     LFODial.setBounds(sectionMix.getX() + 0.15 * sectionMix.getWidth(), sectionMix.getY() + separation, 0.7 * sectionMix.getWidth(), 0.7 * sectionMix.getWidth());
     audioProcessor.waveViewerPre.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
     

@@ -79,11 +79,6 @@ public:
         juce::Path dialTick;
         dialTick.startNewSubPath(centre.getPointOnCircumference(0.45 * radius, toAngle));
         g.setColour(fill);
-        
-        if (toAngle == rotaryStartAngle)
-        {
-            g.setColour(MyColours::vitalMidGrey);
-        }
 
         dialTick.lineTo(centre.getPointOnCircumference(0.65 * radius, toAngle));
         g.strokePath(dialTick, juce::PathStrokeType(lineW * 0.6, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
@@ -102,11 +97,6 @@ public:
         int centerX = x + (width - textWidth) / 2;
         int centerY = y + (height - font.getHeight()) / 2;
         g.setColour(fill);
-        if (toAngle == rotaryStartAngle)
-        {
-            g.setColour(MyColours::vitalMidGrey);
-        }
-
         g.drawText(valueString, centerX, centerY, textWidth, font.getHeight(), juce::Justification::centred, false);
 
     }
@@ -117,40 +107,29 @@ public:
         {
             auto bounds = juce::Rectangle<float>(x, y, width, height);
 
-            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY() + 0.4f * bounds.getHeight(), bounds.getWidth(), 0.15f * bounds.getHeight() };
             g.setColour(MyColours::vitalMidGrey);
-            g.fillRoundedRectangle(sliderOuterPath, 0.2f);
+            g.fillRoundedRectangle(sliderOuterPath, 0.15f);
 
 
-            juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY(), sliderPos - bounds.getX(), 0.4f * bounds.getHeight() };
+            juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY() + 0.4f * bounds.getHeight(), sliderPos - bounds.getX(), 0.15f * bounds.getHeight() };
             g.setColour(MyColours::green);
-            g.fillRoundedRectangle(sliderPath, 0.2f);
+            g.fillRoundedRectangle(sliderPath, 0.15f);
 
 
-            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
-            g.setColour(MyColours::green);
-
-            
-            if (sliderPos == bounds.getX())
-            {
-                g.setColour(MyColours::vitalMidGrey);
-            }
-            
-            g.fillRoundedRectangle(sliderThumb, 0.2f);
+            juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.6f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::green);            
+            g.fillRoundedRectangle(sliderThumb, 0.15f);
 
             // Custom value display
             juce::String valueString = slider.getTextFromValue(slider.getValue());
-            float fontSize = 0.65f * juce::jmin(width, height);
+            float fontSize = 0.4f * juce::jmin(width, height);
             juce::Font font;
             font.setHeight(fontSize);
             g.setFont(font);
             int textWidth = font.getStringWidth(valueString);
-            g.setColour(MyColours::cream);
-            if (sliderPos == bounds.getX())
-            {
-                g.setColour(MyColours::vitalMidGrey);
-            }
-            g.drawText(valueString, x, y, textWidth, font.getHeight(), juce::Justification::centred, false);
+            g.setColour(MyColours::green);
+            g.drawText(valueString, bounds.getX(), bounds.getY() - 0.1f * bounds.getHeight(), textWidth, font.getHeight(), juce::Justification::centred, false);
 
         }
 
@@ -158,59 +137,41 @@ public:
         {
             auto bounds = juce::Rectangle<float>(x, y, width, height);
 
-            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY(), bounds.getWidth(), 0.4f * bounds.getHeight() };
+            juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY() + 0.4f * bounds.getHeight(), bounds.getWidth(), 0.15f * bounds.getHeight() };
             g.setColour(MyColours::vitalMidGrey);
             g.fillRoundedRectangle(sliderOuterPath, 0.2f);
 
 
-            juce::Rectangle<float> sliderPath{ minSliderPos, bounds.getY(), maxSliderPos - minSliderPos, 0.4f * bounds.getHeight()};
+            juce::Rectangle<float> sliderPath{ minSliderPos, bounds.getY() + 0.4f * bounds.getHeight(), maxSliderPos - minSliderPos, 0.15f * bounds.getHeight() };
             g.setColour(MyColours::orange);
-            g.fillRoundedRectangle(sliderPath, 0.2f);
-
-
-            juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
-            g.setColour(MyColours::orange);
-
             
-            if (minSliderPos == bounds.getX())
+            if ((maxSliderPos - minSliderPos) == bounds.getWidth())
             {
                 g.setColour(MyColours::vitalMidGrey);
             }
-            
+            g.fillRoundedRectangle(sliderPath, 0.2f);
+
+            juce::Rectangle<float> sliderMin { minSliderPos, bounds.getY() + 0.6f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.3f * bounds.getHeight() };
+            g.setColour(MyColours::orange);            
             g.fillRoundedRectangle(sliderMin, 0.2f);
 
-            juce::Rectangle<float> sliderMax{ maxSliderPos - 0.01f * bounds.getWidth(), bounds.getY() + 0.5f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.5f * bounds.getHeight() };
+            juce::Rectangle<float> sliderMax{ maxSliderPos - 0.01f * bounds.getWidth(), bounds.getY() + 0.6f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.3f * bounds.getHeight() };
             g.setColour(MyColours::orange);
-
-            
-            if (sliderMax.getRight() == bounds.getRight())
-            {
-                g.setColour(MyColours::vitalGrey);
-            }
             
             g.fillRoundedRectangle(sliderMax, 0.2f);
 
             // Custom value display
             juce::String minValueString = slider.getTextFromValue(slider.getMinValue());
-            float fontSize = 0.65f * juce::jmin(width, height);
+            float fontSize = 0.4f * juce::jmin(width, height);
             juce::Font font;
             font.setHeight(fontSize);
             g.setFont(font);
             int textWidth = font.getStringWidth(minValueString);
-            g.setColour(MyColours::cream);
-            if (minSliderPos == bounds.getX())
-            {
-                g.setColour(MyColours::vitalMidGrey);
-            }
-            g.drawText(minValueString, 0, y, textWidth, font.getHeight(), juce::Justification::centred, false);
-
+            g.setColour(MyColours::orange);
+            g.drawText(minValueString, bounds.getX() - 0.01f * bounds.getWidth(), bounds.getY() - 0.1f * bounds.getHeight(), textWidth, font.getHeight(), juce::Justification::centred, false);
             juce::String maxValueString = slider.getTextFromValue(slider.getMaxValue());
-            g.setColour(MyColours::cream);
-            if (sliderMax.getRight() == bounds.getRight())
-            {
-                g.setColour(MyColours::vitalMidGrey);
-            }
-            g.drawText(maxValueString, bounds.getRight() - 0.01f * bounds.getWidth(), y, textWidth, font.getHeight(), juce::Justification::centred, false);
+            g.setColour(MyColours::orange);
+            g.drawText(maxValueString, bounds.getRight() - 0.05f * bounds.getWidth(), bounds.getY() - 0.1f * bounds.getHeight(), textWidth, font.getHeight(), juce::Justification::centred, false);
 
         }
     }
@@ -279,12 +240,6 @@ private:
     {
         Waves = 1001
     };
-
-    /*
-    juce::TextButton buttonSine;
-    juce::TextButton buttonSaw;
-    juce::TextButton buttonSquare;
-    */
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
