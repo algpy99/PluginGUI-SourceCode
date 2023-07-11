@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "Distortion.h"
 #include "LFOGenerator.h"
+#include "Parameters.h"
 
 //==============================================================================
 /**
@@ -61,9 +62,9 @@ public:
 
 private:
     //==============================================================================
-    //juce::dsp::Reverb reverb;
+    juce::dsp::Reverb reverb;
 
-    //juce::Reverb::Parameters parameters;
+    juce::Reverb::Parameters parameters;
 
     float roomSize = false;
     float damping = false;

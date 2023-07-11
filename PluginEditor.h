@@ -246,6 +246,8 @@ private:
         &doubleSlider,
     };
 
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttach;
+
     enum RadioButtonIds
     {
         Waves = 1001

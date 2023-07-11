@@ -57,6 +57,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     DistoDial.setLookAndFeel(&myLookAndFeel);
     DistoDial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
+    driveAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState , driveID, DistoDial);
+
     addAndMakeVisible(filterSlider);
     filterSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     filterSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);

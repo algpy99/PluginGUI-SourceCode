@@ -22,14 +22,14 @@ InterfaceTestAudioProcessor::InterfaceTestAudioProcessor()
     ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), waveViewerPost(1)
 #endif
 {
-    treeState.addParameterListener("roomSize", this);
-    treeState.addParameterListener("damping", this);
-    treeState.addParameterListener("drive", this);
-    treeState.addParameterListener("frequency", this);
-    treeState.addParameterListener("lfotype", this);
-    treeState.addParameterListener("lowcut", this);
-    treeState.addParameterListener("highcut", this);
-    treeState.addParameterListener("mixLFO", this);
+    treeState.addParameterListener(roomsizeID, this);
+    treeState.addParameterListener(dampingID, this);
+    treeState.addParameterListener(driveID, this);
+    treeState.addParameterListener(frequencyID, this);
+    treeState.addParameterListener(lfotypeID, this);
+    treeState.addParameterListener(lowcutID, this);
+    treeState.addParameterListener(highcutID, this);
+    treeState.addParameterListener(mixLFOID, this);
 
     waveViewerPost.setRepaintRate(30);
     waveViewerPost.setBufferSize(256);
@@ -37,14 +37,14 @@ InterfaceTestAudioProcessor::InterfaceTestAudioProcessor()
 
 InterfaceTestAudioProcessor::~InterfaceTestAudioProcessor()
 {
-    treeState.removeParameterListener("roomSize", this);
-    treeState.removeParameterListener("damping", this);
-    treeState.removeParameterListener("drive", this);
-    treeState.removeParameterListener("frequency", this);
-    treeState.removeParameterListener("lfotype", this);
-    treeState.removeParameterListener("lowcut", this);
-    treeState.removeParameterListener("highcut", this);
-    treeState.removeParameterListener("mixLFO", this);
+    treeState.removeParameterListener(roomsizeID, this);
+    treeState.removeParameterListener(dampingID, this);
+    treeState.removeParameterListener(driveID, this);
+    treeState.removeParameterListener(frequencyID, this);
+    treeState.removeParameterListener(lfotypeID, this);
+    treeState.removeParameterListener(lowcutID, this);
+    treeState.removeParameterListener(highcutID, this);
+    treeState.removeParameterListener(mixLFOID, this);
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout InterfaceTestAudioProcessor::createParameterLayout() {
@@ -53,14 +53,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout InterfaceTestAudioProcessor:
 
     juce::StringArray lfoTypes = { "Sine", "Saw", "Square" };
 
-    auto pRoomSize = std::make_unique<juce::AudioParameterFloat>("roomSize", "RoomSize", 0.0f, 1.0f, 0.0f);
-    auto pDamping = std::make_unique<juce::AudioParameterFloat>("damping", "Damping", 0.0f, 1.0f, 0.0f);
-    auto pDrive = std::make_unique<juce::AudioParameterFloat>("drive", "Drive", 0.0f, 1.0f, 0.0f);
-    auto pFrequency = std::make_unique<juce::AudioParameterFloat>("frequency", "Frequency", 0.0f, 500.0f, 20.0f);
-    auto pLFOType = std::make_unique<juce::AudioParameterChoice>("lfoType", "LFO Type", lfoTypes, 0);
-    auto pLowcut = std::make_unique<juce::AudioParameterFloat>("lowcut", "Lowcut", 22.0f, 22000.0f, 0.0f);
-    auto pHighcut = std::make_unique<juce::AudioParameterFloat>("highcut", "Highcut", 22.0f, 22000.0f, 22000.0f);
-    auto pMixLFO = std::make_unique<juce::AudioParameterFloat>("mixLFO", "Mix", 0.0f, 100.0f, 100.0f);
+    auto pRoomSize = std::make_unique<juce::AudioParameterFloat>(roomsizeID, roomsizeName, 0.0f, 1.0f, 0.0f);
+    auto pDamping = std::make_unique<juce::AudioParameterFloat>(dampingID, dampingName, 0.0f, 1.0f, 0.0f);
+    auto pDrive = std::make_unique<juce::AudioParameterFloat>(driveID, driveName, 0.0f, 24.0f, 0.0f);
+    auto pFrequency = std::make_unique<juce::AudioParameterFloat>(frequencyID, frequencyName, 0.0f, 500.0f, 20.0f);
+    auto pLFOType = std::make_unique<juce::AudioParameterChoice>(lfotypeID, lfotypeName, lfoTypes, 0);
+    auto pLowcut = std::make_unique<juce::AudioParameterFloat>(lowcutID, lowcutName, 22.0f, 22000.0f, 0.0f);
+    auto pHighcut = std::make_unique<juce::AudioParameterFloat>(highcutID, highcutName, 22.0f, 22000.0f, 22000.0f);
+    auto pMixLFO = std::make_unique<juce::AudioParameterFloat>(mixLFOID, mixLFOName, 0.0f, 100.0f, 100.0f);
 
     params.push_back(std::move(pRoomSize));
     params.push_back(std::move(pDamping));
@@ -79,21 +79,22 @@ void InterfaceTestAudioProcessor::parameterChanged(const juce::String& parameter
 {
     updateParameters();
 
-    treeState.addParameterListener("roomSize", this);
-    treeState.addParameterListener("damping", this);
-    treeState.addParameterListener("drive", this);
-    treeState.addParameterListener("frequency", this);
-    treeState.addParameterListener("lfotype", this);
-    treeState.addParameterListener("lowcut", this);
-    treeState.addParameterListener("highcut", this);
-    treeState.addParameterListener("mixLFO", this);
+    treeState.addParameterListener(roomsizeID, this);
+    treeState.addParameterListener(dampingID, this);
+    treeState.addParameterListener(driveID, this);
+    treeState.addParameterListener(frequencyID, this);
+    treeState.addParameterListener(lfotypeID, this);
+    treeState.addParameterListener(lowcutID, this);
+    treeState.addParameterListener(highcutID, this);
+    treeState.addParameterListener(mixLFOID, this);
 }
 
 void InterfaceTestAudioProcessor::updateParameters()
 {
-    //reverb.setParameters(parameters);
+    reverb.setParameters(parameters);
 
-    distortion.setMix(treeState.getRawParameterValue("mix")->load());
+    distortion.setMix(1.0);
+    distortion.setDrive(treeState.getRawParameterValue(driveID)->load());
 }
 
 //==============================================================================
@@ -169,8 +170,8 @@ void InterfaceTestAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     distortion.reset();
     distortion.prepare(spec);
 
-    //reverb.reset();
-    //reverb.prepare(spec);
+    reverb.reset();
+    reverb.prepare(spec);
 
     lfo.prepare(spec);
 
@@ -220,7 +221,7 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
     juce::dsp::AudioBlock<float> block(buffer);
 
-    //reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
+    reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
 
     distortion.process(juce::dsp::ProcessContextReplacing<float>(block));
 
