@@ -19,44 +19,58 @@ InterfaceTestAudioProcessor::InterfaceTestAudioProcessor()
 #endif
         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-    ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), waveViewerPre(1), waveViewerPost(1)
+    ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), waveViewerPost(1)
 #endif
 {
     treeState.addParameterListener("roomSize", this);
     treeState.addParameterListener("damping", this);
-    treeState.addParameterListener("wetLevel", this);
-
-    waveViewerPre.setRepaintRate(30);
-    waveViewerPre.setBufferSize(256);
+    treeState.addParameterListener("drive", this);
+    treeState.addParameterListener("frequency", this);
+    treeState.addParameterListener("lfotype", this);
+    treeState.addParameterListener("lowcut", this);
+    treeState.addParameterListener("highcut", this);
+    treeState.addParameterListener("mixLFO", this);
 
     waveViewerPost.setRepaintRate(30);
     waveViewerPost.setBufferSize(256);
 }
 
-/*
-    float roomSize = false;
-    float damping = false;
-    float wetLevel = false;
-*/
-
 InterfaceTestAudioProcessor::~InterfaceTestAudioProcessor()
 {
     treeState.removeParameterListener("roomSize", this);
     treeState.removeParameterListener("damping", this);
-    treeState.removeParameterListener("wetLevel", this);
+    treeState.removeParameterListener("drive", this);
+    treeState.removeParameterListener("frequency", this);
+    treeState.removeParameterListener("lfotype", this);
+    treeState.removeParameterListener("lowcut", this);
+    treeState.removeParameterListener("highcut", this);
+    treeState.removeParameterListener("mixLFO", this);
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout InterfaceTestAudioProcessor::createParameterLayout() {
 
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    auto pRoomSize = std::make_unique<juce::AudioParameterFloat>("roomSize", "RoomSize", 0.0f, 1.0f, 0.5f);
-    auto pDamping = std::make_unique<juce::AudioParameterFloat>("damping", "Damping", 0.0f, 1.0f, 0.5f);
-    auto pWetLevel = std::make_unique<juce::AudioParameterFloat>("wetLevel", "WetLevel", 0.0f, 1.0f, 0.5f);
-    
+    juce::StringArray lfoTypes = { "Sine", "Saw", "Square" };
+
+    auto pRoomSize = std::make_unique<juce::AudioParameterFloat>("roomSize", "RoomSize", 0.0f, 1.0f, 0.0f);
+    auto pDamping = std::make_unique<juce::AudioParameterFloat>("damping", "Damping", 0.0f, 1.0f, 0.0f);
+    auto pDrive = std::make_unique<juce::AudioParameterFloat>("drive", "Drive", 0.0f, 1.0f, 0.0f);
+    auto pFrequency = std::make_unique<juce::AudioParameterFloat>("frequency", "Frequency", 0.0f, 500.0f, 20.0f);
+    auto pLFOType = std::make_unique<juce::AudioParameterChoice>("lfoType", "LFO Type", lfoTypes, 0);
+    auto pLowcut = std::make_unique<juce::AudioParameterFloat>("lowcut", "Lowcut", 22.0f, 22000.0f, 0.0f);
+    auto pHighcut = std::make_unique<juce::AudioParameterFloat>("highcut", "Highcut", 22.0f, 22000.0f, 22000.0f);
+    auto pMixLFO = std::make_unique<juce::AudioParameterFloat>("mixLFO", "Mix", 0.0f, 100.0f, 100.0f);
+
     params.push_back(std::move(pRoomSize));
     params.push_back(std::move(pDamping));
-    params.push_back(std::move(pWetLevel));
+    params.push_back(std::move(pDrive));
+    params.push_back(std::move(pFrequency));
+    params.push_back(std::move(pLFOType));
+    params.push_back(std::move(pLowcut));
+    params.push_back(std::move(pHighcut));
+    params.push_back(std::move(pMixLFO));
+
 
     return { params.begin(), params.end() };
 } 
@@ -65,27 +79,21 @@ void InterfaceTestAudioProcessor::parameterChanged(const juce::String& parameter
 {
     updateParameters();
 
-    
-    if (parameterID == "wetLevel")
-    {
-        wetLevel = newValue;
-        DBG("wetLevel is: " << newValue);
-    }
-    
-
     treeState.addParameterListener("roomSize", this);
     treeState.addParameterListener("damping", this);
-    treeState.addParameterListener("wetLevel", this);
+    treeState.addParameterListener("drive", this);
+    treeState.addParameterListener("frequency", this);
+    treeState.addParameterListener("lfotype", this);
+    treeState.addParameterListener("lowcut", this);
+    treeState.addParameterListener("highcut", this);
+    treeState.addParameterListener("mixLFO", this);
 }
 
 void InterfaceTestAudioProcessor::updateParameters()
 {
-    /*
-    parameters.wetLevel = 0.5;
-    parameters.wetLevel = 0.5;
-    */
-    parameters.wetLevel = 0.5;
-    reverb.setParameters(parameters);
+    //reverb.setParameters(parameters);
+
+    distortion.setMix(treeState.getRawParameterValue("mix")->load());
 }
 
 //==============================================================================
@@ -158,8 +166,13 @@ void InterfaceTestAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     spec.sampleRate = sampleRate;
     spec.numChannels = getTotalNumOutputChannels();
 
-    reverb.reset();
-    reverb.prepare(spec);
+    distortion.reset();
+    distortion.prepare(spec);
+
+    //reverb.reset();
+    //reverb.prepare(spec);
+
+    lfo.prepare(spec);
 
     updateParameters();
 }
@@ -207,7 +220,9 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
     juce::dsp::AudioBlock<float> block(buffer);
 
-    waveViewerPre.pushBuffer(buffer);
+    //reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
+
+    distortion.process(juce::dsp::ProcessContextReplacing<float>(block));
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -218,7 +233,6 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
             channelData[sample] = buffer.getSample(channel, sample) * 3.0f;
         }
     }
-     
     waveViewerPost.pushBuffer(buffer);
 }
 
@@ -237,15 +251,20 @@ juce::AudioProcessorEditor* InterfaceTestAudioProcessor::createEditor()
 //==============================================================================
 void InterfaceTestAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    //juce::MemoryOutputStream stream(destData, false);
+    //treeState.state.writeToStream(stream);
 }
 
 void InterfaceTestAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    /*
+    auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
+
+    if (tree.isValid())
+    {
+        treeState.state = tree;
+    }
+    */
 }
 
 //==============================================================================

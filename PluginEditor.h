@@ -236,6 +236,16 @@ private:
     juce::TextButton buttonSaw;
     juce::TextButton buttonSquare;
 
+    std::vector<juce::Slider*> dials =
+    {
+        &reverbDial1,
+        &reverbDial2,
+        &DistoDial,
+        &filterSlider,
+        &LFODial,
+        &doubleSlider,
+    };
+
     enum RadioButtonIds
     {
         Waves = 1001

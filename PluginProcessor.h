@@ -9,6 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Distortion.h"
+#include "LFOGenerator.h"
 
 //==============================================================================
 /**
@@ -55,18 +57,20 @@ public:
 
     juce::AudioProcessorValueTreeState treeState;
 
-    juce::AudioVisualiserComponent waveViewerPre;
     juce::AudioVisualiserComponent waveViewerPost;
 
 private:
     //==============================================================================
-    juce::dsp::Reverb reverb;
+    //juce::dsp::Reverb reverb;
 
-    juce::Reverb::Parameters parameters;
+    //juce::Reverb::Parameters parameters;
 
     float roomSize = false;
     float damping = false;
-    float wetLevel = false;
+
+    alex_dsp::LFOGenerator lfo;
+
+    Distortion<float> distortion;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged(const juce::String& parameterID, float newValue) override;

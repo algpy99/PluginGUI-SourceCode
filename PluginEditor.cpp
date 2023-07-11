@@ -12,8 +12,7 @@
 //==============================================================================
 InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceTestAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
-{
-    
+{    
     initWindow();
 
     buttonSine.setToggleState(true, juce::NotificationType::dontSendNotification);
@@ -80,8 +79,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     LFODial.setLookAndFeel(&myLookAndFeel);
     LFODial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
-    addAndMakeVisible(audioProcessor.waveViewerPre);
-    audioProcessor.waveViewerPre.setColours(MyColours::vitalMidGrey, MyColours::orange);
+    addAndMakeVisible(audioProcessor.waveViewerPost);
+    audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::orange);
     addAndMakeVisible(audioProcessor.waveViewerPost);
     audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::green);
 
@@ -141,28 +140,7 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
     doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
     LFODial.setBounds(sectionMix.getX() + 0.15 * sectionMix.getWidth(), sectionMix.getY() + separation, 0.7 * sectionMix.getWidth(), 0.7 * sectionMix.getWidth());
-    audioProcessor.waveViewerPre.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
-    
-    //audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, audioProcessor.waveViewerPre.getBottom() + separation, sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
-
-    /*
-    // SECTION LINES
-    lineFX = { margin, 1.0f * sectionFX.getY() - 0.5f * sectionFX.getHeight(), 1.0f, 0.5f * sectionFX.getHeight() };
-    g.setColour(MyColours::vitalGrey);
-    if (reverbDial1.isMouseOverOrDragging(true))
-    {
-        g.setColour(MyColours::orange);
-        DBG("helloooo");
-    }
-    g.fillRect(lineFX);
-
-    juce::Line<float> lineLFO(juce::Point<float>(margin, 1.0f * sectionLFO.getBottom() - 0.22f * sectionLFO.getHeight()), juce::Point<float>(margin, sectionLFO.getY() + separation));
-    g.setColour(MyColours::green);
-    g.drawLine(lineLFO, 2.5f);
-    juce::Line<float> lineMIX(juce::Point<float>(getRight() - margin, sectionMix.getY() + 0.18f * sectionMix.getHeight()), juce::Point<float>(getRight() - margin, sectionLFO.getBottom() - margin));
-    g.setColour(MyColours::green);
-    g.drawLine(lineMIX, 2.5f);
-    */
+    audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
 }
 
 void InterfaceTestAudioProcessorEditor::resized()
