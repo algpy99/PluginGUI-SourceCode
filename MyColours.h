@@ -29,5 +29,4 @@ namespace MyColours
     const juce::Colour vitalMidGrey{ 0xff282c2f };
     const juce::Colour vitalBlackGrey{ 0xff2a2e31 };
     const juce::Colour vitalBlack{ 0xff1e2125 };
-
 }
