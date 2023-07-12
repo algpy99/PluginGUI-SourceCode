@@ -56,7 +56,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout InterfaceTestAudioProcessor:
     auto pRoomSize = std::make_unique<juce::AudioParameterFloat>(roomsizeID, roomsizeName, 0.0f, 1.0f, 0.0f);
     auto pDamping = std::make_unique<juce::AudioParameterFloat>(dampingID, dampingName, 0.0f, 1.0f, 0.0f);
     auto pDrive = std::make_unique<juce::AudioParameterFloat>(driveID, driveName, 0.0f, 24.0f, 0.0f);
-    auto pFrequency = std::make_unique<juce::AudioParameterFloat>(frequencyID, frequencyName, 0.0f, 500.0f, 20.0f);
+    auto pFrequency = std::make_unique<juce::AudioParameterFloat>(frequencyID, frequencyName, 0.0f, 50.0f, 20.0f);
     auto pLFOType = std::make_unique<juce::AudioParameterChoice>(lfotypeID, lfotypeName, lfoTypes, 0);
     auto pLowcut = std::make_unique<juce::AudioParameterFloat>(lowcutID, lowcutName, 22.0f, 22000.0f, 0.0f);
     auto pHighcut = std::make_unique<juce::AudioParameterFloat>(highcutID, highcutName, 22.0f, 22000.0f, 22000.0f);
@@ -91,10 +91,33 @@ void InterfaceTestAudioProcessor::parameterChanged(const juce::String& parameter
 
 void InterfaceTestAudioProcessor::updateParameters()
 {
+    parameters.damping = 0.5f;     /**< Damping, 0 to 1.0, where 0 is not damped, 1.0 is fully damped. */
+    parameters.wetLevel = 0.33f;    /**< Wet level, 0 to 1.0 */
+    parameters.dryLevel = 0.4f;     /**< Dry level, 0 to 1.0 */
+    parameters.freezeMode = 0.0f;
+
+    /*
+    auto type = static_cast<int>(treeState.getRawParameterValue("lfoType")->load());
+    switch (type)
+    {
+    case 0:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSine);
+        break;
+    case 1:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSaw);
+        break;
+    case 2:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSquare);
+        break;
+    }
+    */
+
     reverb.setParameters(parameters);
 
     distortion.setMix(1.0);
     distortion.setDrive(treeState.getRawParameterValue(driveID)->load());
+
+    lfo.setFrequency(treeState.getRawParameterValue(frequencyID)->load());
 }
 
 //==============================================================================
@@ -221,6 +244,12 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
     juce::dsp::AudioBlock<float> block(buffer);
 
+    parameters.roomSize = treeState.getRawParameterValue(roomsizeID)->load();
+    parameters.width = treeState.getRawParameterValue(dampingID)->load();
+
+    //Parameters.m_frequency = 
+        //treeState.getRawParameterValue(lfotypeID)->load());
+
     reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
 
     distortion.process(juce::dsp::ProcessContextReplacing<float>(block));
@@ -231,7 +260,8 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            channelData[sample] = buffer.getSample(channel, sample) * 3.0f;
+            lfo.process();
+            channelData[sample] = buffer.getSample(channel, sample) * lfo.getCurrentLFOValue();
         }
     }
     waveViewerPost.pushBuffer(buffer);

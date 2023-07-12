@@ -62,12 +62,13 @@ public:
 
 private:
     //==============================================================================
-    juce::dsp::Reverb reverb;
 
     juce::Reverb::Parameters parameters;
 
     float roomSize = false;
-    float damping = false;
+    float width = false;
+
+    juce::dsp::Reverb reverb;
 
     alex_dsp::LFOGenerator lfo;
 

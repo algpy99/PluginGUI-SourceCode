@@ -246,7 +246,15 @@ private:
         &doubleSlider,
     };
 
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> roomsizeAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dampingAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttach;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencyAttach;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sineAttach;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sawAttach;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> squareAttach;
 
     enum RadioButtonIds
     {

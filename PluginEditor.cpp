@@ -16,6 +16,7 @@ InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceT
     initWindow();
 
     buttonSine.setToggleState(true, juce::NotificationType::dontSendNotification);
+
     initDials();
 
 }
@@ -41,6 +42,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     reverbDial1.setLookAndFeel(&myLookAndFeel);
     reverbDial1.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
+    roomsizeAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState , roomsizeID, reverbDial1);
+
     addAndMakeVisible(reverbDial2);
     reverbDial2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     reverbDial2.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
@@ -48,6 +51,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     reverbDial2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     reverbDial2.setLookAndFeel(&myLookAndFeel);
     reverbDial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+
+    dampingAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, dampingID, reverbDial2);
 
     addAndMakeVisible(DistoDial);
     DistoDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -65,10 +70,11 @@ void InterfaceTestAudioProcessorEditor::initDials()
     filterSlider.setRange(0.0, 100.0, 1.0);
     filterSlider.setLookAndFeel(&myLookAndFeel);
 
+    frequencyAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, frequencyID, filterSlider);
+
     addAndMakeVisible(doubleSlider);
     doubleSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
     doubleSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    //doubleSlider.setRange(0.0, 100.0, 1.0);
     doubleSlider.setMinValue(0.0);
     doubleSlider.setMaxValue(100.0);
     doubleSlider.setLookAndFeel(&myLookAndFeel);
@@ -91,15 +97,21 @@ void InterfaceTestAudioProcessorEditor::initDials()
     buttonSine.setClickingTogglesState(true);
     buttonSine.setLookAndFeel(&myLookAndFeel);
 
+    sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSine);
+
     addAndMakeVisible(buttonSaw);
     buttonSaw.setButtonText("Saw");
     buttonSaw.setClickingTogglesState(true);
     buttonSaw.setLookAndFeel(&myLookAndFeel);
 
+    //sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSaw);
+
     addAndMakeVisible(buttonSquare);
     buttonSquare.setButtonText("Square");
     buttonSquare.setClickingTogglesState(true);
     buttonSquare.setLookAndFeel(&myLookAndFeel);
+
+    //sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSquare);
 
     buttonSine.setRadioGroupId(Waves);
     buttonSaw.setRadioGroupId(Waves);
