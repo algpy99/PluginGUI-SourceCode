@@ -12,11 +12,11 @@
 //==============================================================================
 InterfaceTestAudioProcessorEditor::InterfaceTestAudioProcessorEditor (InterfaceTestAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
-{
-    
+{    
     initWindow();
 
     buttonSine.setToggleState(true, juce::NotificationType::dontSendNotification);
+
     initDials();
 
 }
@@ -42,6 +42,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     reverbDial1.setLookAndFeel(&myLookAndFeel);
     reverbDial1.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
+    roomsizeAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState , roomsizeID, reverbDial1);
+
     addAndMakeVisible(reverbDial2);
     reverbDial2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     reverbDial2.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
@@ -49,6 +51,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     reverbDial2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
     reverbDial2.setLookAndFeel(&myLookAndFeel);
     reverbDial2.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+
+    dampingAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, dampingID, reverbDial2);
 
     addAndMakeVisible(DistoDial);
     DistoDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -58,16 +62,19 @@ void InterfaceTestAudioProcessorEditor::initDials()
     DistoDial.setLookAndFeel(&myLookAndFeel);
     DistoDial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
+    driveAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState , driveID, DistoDial);
+
     addAndMakeVisible(filterSlider);
     filterSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     filterSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
     filterSlider.setRange(0.0, 100.0, 1.0);
     filterSlider.setLookAndFeel(&myLookAndFeel);
 
+    frequencyAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, frequencyID, filterSlider);
+
     addAndMakeVisible(doubleSlider);
     doubleSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
     doubleSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    //doubleSlider.setRange(0.0, 100.0, 1.0);
     doubleSlider.setMinValue(0.0);
     doubleSlider.setMaxValue(100.0);
     doubleSlider.setLookAndFeel(&myLookAndFeel);
@@ -80,8 +87,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     LFODial.setLookAndFeel(&myLookAndFeel);
     LFODial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
-    addAndMakeVisible(audioProcessor.waveViewerPre);
-    audioProcessor.waveViewerPre.setColours(MyColours::vitalMidGrey, MyColours::orange);
+    addAndMakeVisible(audioProcessor.waveViewerPost);
+    audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::orange);
     addAndMakeVisible(audioProcessor.waveViewerPost);
     audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::green);
 
@@ -90,15 +97,21 @@ void InterfaceTestAudioProcessorEditor::initDials()
     buttonSine.setClickingTogglesState(true);
     buttonSine.setLookAndFeel(&myLookAndFeel);
 
+    sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSine);
+
     addAndMakeVisible(buttonSaw);
     buttonSaw.setButtonText("Saw");
     buttonSaw.setClickingTogglesState(true);
     buttonSaw.setLookAndFeel(&myLookAndFeel);
 
+    //sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSaw);
+
     addAndMakeVisible(buttonSquare);
     buttonSquare.setButtonText("Square");
     buttonSquare.setClickingTogglesState(true);
     buttonSquare.setLookAndFeel(&myLookAndFeel);
+
+    //sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSquare);
 
     buttonSine.setRadioGroupId(Waves);
     buttonSaw.setRadioGroupId(Waves);
@@ -141,28 +154,7 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
     doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
     LFODial.setBounds(sectionMix.getX() + 0.15 * sectionMix.getWidth(), sectionMix.getY() + separation, 0.7 * sectionMix.getWidth(), 0.7 * sectionMix.getWidth());
-    audioProcessor.waveViewerPre.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
-    
-    //audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, audioProcessor.waveViewerPre.getBottom() + separation, sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
-
-    /*
-    // SECTION LINES
-    lineFX = { margin, 1.0f * sectionFX.getY() - 0.5f * sectionFX.getHeight(), 1.0f, 0.5f * sectionFX.getHeight() };
-    g.setColour(MyColours::vitalGrey);
-    if (reverbDial1.isMouseOverOrDragging(true))
-    {
-        g.setColour(MyColours::orange);
-        DBG("helloooo");
-    }
-    g.fillRect(lineFX);
-
-    juce::Line<float> lineLFO(juce::Point<float>(margin, 1.0f * sectionLFO.getBottom() - 0.22f * sectionLFO.getHeight()), juce::Point<float>(margin, sectionLFO.getY() + separation));
-    g.setColour(MyColours::green);
-    g.drawLine(lineLFO, 2.5f);
-    juce::Line<float> lineMIX(juce::Point<float>(getRight() - margin, sectionMix.getY() + 0.18f * sectionMix.getHeight()), juce::Point<float>(getRight() - margin, sectionLFO.getBottom() - margin));
-    g.setColour(MyColours::green);
-    g.drawLine(lineMIX, 2.5f);
-    */
+    audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
 }
 
 void InterfaceTestAudioProcessorEditor::resized()

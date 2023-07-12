@@ -19,44 +19,58 @@ InterfaceTestAudioProcessor::InterfaceTestAudioProcessor()
 #endif
         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-    ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), waveViewerPre(1), waveViewerPost(1)
+    ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), waveViewerPost(1)
 #endif
 {
-    treeState.addParameterListener("roomSize", this);
-    treeState.addParameterListener("damping", this);
-    treeState.addParameterListener("wetLevel", this);
-
-    waveViewerPre.setRepaintRate(30);
-    waveViewerPre.setBufferSize(256);
+    treeState.addParameterListener(roomsizeID, this);
+    treeState.addParameterListener(dampingID, this);
+    treeState.addParameterListener(driveID, this);
+    treeState.addParameterListener(frequencyID, this);
+    treeState.addParameterListener(lfotypeID, this);
+    treeState.addParameterListener(lowcutID, this);
+    treeState.addParameterListener(highcutID, this);
+    treeState.addParameterListener(mixLFOID, this);
 
     waveViewerPost.setRepaintRate(30);
     waveViewerPost.setBufferSize(256);
 }
 
-/*
-    float roomSize = false;
-    float damping = false;
-    float wetLevel = false;
-*/
-
 InterfaceTestAudioProcessor::~InterfaceTestAudioProcessor()
 {
-    treeState.removeParameterListener("roomSize", this);
-    treeState.removeParameterListener("damping", this);
-    treeState.removeParameterListener("wetLevel", this);
+    treeState.removeParameterListener(roomsizeID, this);
+    treeState.removeParameterListener(dampingID, this);
+    treeState.removeParameterListener(driveID, this);
+    treeState.removeParameterListener(frequencyID, this);
+    treeState.removeParameterListener(lfotypeID, this);
+    treeState.removeParameterListener(lowcutID, this);
+    treeState.removeParameterListener(highcutID, this);
+    treeState.removeParameterListener(mixLFOID, this);
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout InterfaceTestAudioProcessor::createParameterLayout() {
 
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    auto pRoomSize = std::make_unique<juce::AudioParameterFloat>("roomSize", "RoomSize", 0.0f, 1.0f, 0.5f);
-    auto pDamping = std::make_unique<juce::AudioParameterFloat>("damping", "Damping", 0.0f, 1.0f, 0.5f);
-    auto pWetLevel = std::make_unique<juce::AudioParameterFloat>("wetLevel", "WetLevel", 0.0f, 1.0f, 0.5f);
-    
+    juce::StringArray lfoTypes = { "Sine", "Saw", "Square" };
+
+    auto pRoomSize = std::make_unique<juce::AudioParameterFloat>(roomsizeID, roomsizeName, 0.0f, 1.0f, 0.0f);
+    auto pDamping = std::make_unique<juce::AudioParameterFloat>(dampingID, dampingName, 0.0f, 1.0f, 0.0f);
+    auto pDrive = std::make_unique<juce::AudioParameterFloat>(driveID, driveName, 0.0f, 24.0f, 0.0f);
+    auto pFrequency = std::make_unique<juce::AudioParameterFloat>(frequencyID, frequencyName, 0.0f, 50.0f, 20.0f);
+    auto pLFOType = std::make_unique<juce::AudioParameterChoice>(lfotypeID, lfotypeName, lfoTypes, 0);
+    auto pLowcut = std::make_unique<juce::AudioParameterFloat>(lowcutID, lowcutName, 22.0f, 22000.0f, 0.0f);
+    auto pHighcut = std::make_unique<juce::AudioParameterFloat>(highcutID, highcutName, 22.0f, 22000.0f, 22000.0f);
+    auto pMixLFO = std::make_unique<juce::AudioParameterFloat>(mixLFOID, mixLFOName, 0.0f, 100.0f, 100.0f);
+
     params.push_back(std::move(pRoomSize));
     params.push_back(std::move(pDamping));
-    params.push_back(std::move(pWetLevel));
+    params.push_back(std::move(pDrive));
+    params.push_back(std::move(pFrequency));
+    params.push_back(std::move(pLFOType));
+    params.push_back(std::move(pLowcut));
+    params.push_back(std::move(pHighcut));
+    params.push_back(std::move(pMixLFO));
+
 
     return { params.begin(), params.end() };
 } 
@@ -65,27 +79,45 @@ void InterfaceTestAudioProcessor::parameterChanged(const juce::String& parameter
 {
     updateParameters();
 
-    
-    if (parameterID == "wetLevel")
-    {
-        wetLevel = newValue;
-        DBG("wetLevel is: " << newValue);
-    }
-    
-
-    treeState.addParameterListener("roomSize", this);
-    treeState.addParameterListener("damping", this);
-    treeState.addParameterListener("wetLevel", this);
+    treeState.addParameterListener(roomsizeID, this);
+    treeState.addParameterListener(dampingID, this);
+    treeState.addParameterListener(driveID, this);
+    treeState.addParameterListener(frequencyID, this);
+    treeState.addParameterListener(lfotypeID, this);
+    treeState.addParameterListener(lowcutID, this);
+    treeState.addParameterListener(highcutID, this);
+    treeState.addParameterListener(mixLFOID, this);
 }
 
 void InterfaceTestAudioProcessor::updateParameters()
 {
+    parameters.damping = 0.5f;     /**< Damping, 0 to 1.0, where 0 is not damped, 1.0 is fully damped. */
+    parameters.wetLevel = 0.33f;    /**< Wet level, 0 to 1.0 */
+    parameters.dryLevel = 0.4f;     /**< Dry level, 0 to 1.0 */
+    parameters.freezeMode = 0.0f;
+
     /*
-    parameters.wetLevel = 0.5;
-    parameters.wetLevel = 0.5;
+    auto type = static_cast<int>(treeState.getRawParameterValue("lfoType")->load());
+    switch (type)
+    {
+    case 0:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSine);
+        break;
+    case 1:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSaw);
+        break;
+    case 2:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSquare);
+        break;
+    }
     */
-    parameters.wetLevel = 0.5;
+
     reverb.setParameters(parameters);
+
+    distortion.setMix(1.0);
+    distortion.setDrive(treeState.getRawParameterValue(driveID)->load());
+
+    lfo.setFrequency(treeState.getRawParameterValue(frequencyID)->load());
 }
 
 //==============================================================================
@@ -158,8 +190,13 @@ void InterfaceTestAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     spec.sampleRate = sampleRate;
     spec.numChannels = getTotalNumOutputChannels();
 
+    distortion.reset();
+    distortion.prepare(spec);
+
     reverb.reset();
     reverb.prepare(spec);
+
+    lfo.prepare(spec);
 
     updateParameters();
 }
@@ -207,7 +244,15 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
     juce::dsp::AudioBlock<float> block(buffer);
 
-    waveViewerPre.pushBuffer(buffer);
+    parameters.roomSize = treeState.getRawParameterValue(roomsizeID)->load();
+    parameters.width = treeState.getRawParameterValue(dampingID)->load();
+
+    //Parameters.m_frequency = 
+        //treeState.getRawParameterValue(lfotypeID)->load());
+
+    reverb.process(juce::dsp::ProcessContextReplacing<float>(block));
+
+    distortion.process(juce::dsp::ProcessContextReplacing<float>(block));
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -215,10 +260,10 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            channelData[sample] = buffer.getSample(channel, sample) * 3.0f;
+            lfo.process();
+            channelData[sample] = buffer.getSample(channel, sample) * lfo.getCurrentLFOValue();
         }
     }
-     
     waveViewerPost.pushBuffer(buffer);
 }
 
@@ -237,15 +282,20 @@ juce::AudioProcessorEditor* InterfaceTestAudioProcessor::createEditor()
 //==============================================================================
 void InterfaceTestAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    //juce::MemoryOutputStream stream(destData, false);
+    //treeState.state.writeToStream(stream);
 }
 
 void InterfaceTestAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    /*
+    auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
+
+    if (tree.isValid())
+    {
+        treeState.state = tree;
+    }
+    */
 }
 
 //==============================================================================
