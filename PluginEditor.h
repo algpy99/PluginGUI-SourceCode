@@ -256,6 +256,10 @@ private:
     //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sawAttach;
     //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> squareAttach;
 
+    std::unique_ptr<juce::ParameterAttachment> lowcutAttach;
+    std::unique_ptr<juce::ParameterAttachment> highcutAttach;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
+
     enum RadioButtonIds
     {
         Waves = 1001

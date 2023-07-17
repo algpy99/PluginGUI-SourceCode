@@ -118,6 +118,9 @@ void InterfaceTestAudioProcessor::updateParameters()
     distortion.setDrive(treeState.getRawParameterValue(driveID)->load());
 
     lfo.setFrequency(treeState.getRawParameterValue(frequencyID)->load());
+
+    LPfilter.setCutoffFrequency(treeState.getRawParameterValue(highcutID)->load());
+    HPfilter.setCutoffFrequency(treeState.getRawParameterValue(lowcutID)->load());
 }
 
 //==============================================================================
@@ -198,6 +201,12 @@ void InterfaceTestAudioProcessor::prepareToPlay (double sampleRate, int samplesP
 
     lfo.prepare(spec);
 
+    LPfilter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
+    LPfilter.prepare(spec);
+
+    LPfilter.setType(juce::dsp::StateVariableTPTFilterType::highpass);
+    HPfilter.prepare(spec);
+
     updateParameters();
 }
 
@@ -264,6 +273,9 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
             channelData[sample] = buffer.getSample(channel, sample) * lfo.getCurrentLFOValue();
         }
     }
+    LPfilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+    HPfilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+
     waveViewerPost.pushBuffer(buffer);
 }
 

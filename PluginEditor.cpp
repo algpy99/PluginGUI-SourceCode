@@ -79,6 +79,19 @@ void InterfaceTestAudioProcessorEditor::initDials()
     doubleSlider.setMaxValue(100.0);
     doubleSlider.setLookAndFeel(&myLookAndFeel);
 
+    //**
+    //lowcutAttach = std::make_unique<juce::ParameterAttachment>(*audioProcessor.treeState.getParameter(lowcutID), [doubleSlider](float value) {doubleSlider.setMinValue(value);}, nullptr);
+    //highcutAttach = std::make_unique<juce::ParameterAttachment>(*audioProcessor.treeState.getParameter(highcutID), [doubleSlider](float value) {doubleSlider.setMinValue(value); }, nullptr);
+    //**
+
+    //juce::AudioProcessorParameter* minParameter = audioProcessor.treeState.getParameter(lowcutID);
+    //lowcutAttach = std::make_unique<juce::ParameterAttachment>(*minParameter, doubleSlider.getMinValueObject());
+
+    //lowcutAttach = std::make_unique<juce::ParameterAttachment>((lowcutID),(),());
+
+    //lowcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, lowcutID, doubleSlider);
+    //highcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, highcutID, doubleSlider);
+
     addAndMakeVisible(LFODial);
     LFODial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     LFODial.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
