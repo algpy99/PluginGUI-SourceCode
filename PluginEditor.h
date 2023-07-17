@@ -232,6 +232,9 @@ private:
     juce::Slider LFODial;
     juce::Slider doubleSlider;
 
+    juce::Slider lowcutSlider;
+    juce::Slider highcutSlider;
+
     juce::TextButton buttonSine;
     juce::TextButton buttonSaw;
     juce::TextButton buttonSquare;
@@ -244,6 +247,9 @@ private:
         &filterSlider,
         &LFODial,
         &doubleSlider,
+
+        &lowcutSlider,
+        &highcutSlider
     };
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> roomsizeAttach;
@@ -255,6 +261,13 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sineAttach;
     //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sawAttach;
     //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> squareAttach;
+
+    //std::unique_ptr<juce::ParameterAttachment> lowcutAttach;
+    //std::unique_ptr<juce::ParameterAttachment> highcutAttach;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lowcutAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
 
     enum RadioButtonIds
     {

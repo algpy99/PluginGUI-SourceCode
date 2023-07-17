@@ -79,6 +79,19 @@ void InterfaceTestAudioProcessorEditor::initDials()
     doubleSlider.setMaxValue(100.0);
     doubleSlider.setLookAndFeel(&myLookAndFeel);
 
+    //**
+    //lowcutAttach = std::make_unique<juce::ParameterAttachment>(*audioProcessor.treeState.getParameter(lowcutID), [doubleSlider](float value) {doubleSlider.setMinValue(value);}, nullptr);
+    //highcutAttach = std::make_unique<juce::ParameterAttachment>(*audioProcessor.treeState.getParameter(highcutID), [doubleSlider](float value) {doubleSlider.setMinValue(value); }, nullptr);
+    //**
+
+    //juce::AudioProcessorParameter* minParameter = audioProcessor.treeState.getParameter(lowcutID);
+    //lowcutAttach = std::make_unique<juce::ParameterAttachment>(*minParameter, doubleSlider.getMinValueObject());
+
+    //lowcutAttach = std::make_unique<juce::ParameterAttachment>((lowcutID),(),());
+
+    //lowcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, lowcutID, doubleSlider);
+    //highcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, highcutID, doubleSlider);
+
     addAndMakeVisible(LFODial);
     LFODial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     LFODial.setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 20);
@@ -116,6 +129,26 @@ void InterfaceTestAudioProcessorEditor::initDials()
     buttonSine.setRadioGroupId(Waves);
     buttonSaw.setRadioGroupId(Waves);
     buttonSquare.setRadioGroupId(Waves);
+
+    addAndMakeVisible(lowcutSlider);
+    lowcutSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    lowcutSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 40, 20);
+    lowcutSlider.setRange(0.0, 100.0, 1.0);
+    lowcutSlider.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
+    lowcutSlider.setLookAndFeel(&myLookAndFeel);
+    lowcutSlider.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+
+    lowcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, lowcutID, lowcutSlider);
+
+    addAndMakeVisible(highcutSlider);
+    highcutSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    highcutSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 40, 20);
+    highcutSlider.setRange(0.0, 100.0, 1.0);
+    highcutSlider.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
+    highcutSlider.setLookAndFeel(&myLookAndFeel);
+    highcutSlider.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+
+    highcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, highcutID, highcutSlider);
 }
 
 InterfaceTestAudioProcessorEditor::~InterfaceTestAudioProcessorEditor()
@@ -152,9 +185,13 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     buttonSquare.setBounds(buttonSaw.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
 
     filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
-    doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
-    LFODial.setBounds(sectionMix.getX() + 0.15 * sectionMix.getWidth(), sectionMix.getY() + separation, 0.7 * sectionMix.getWidth(), 0.7 * sectionMix.getWidth());
-    audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, LFODial.getBottom(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
+    //doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
+    LFODial.setBounds(sectionMix.getX() + 0.2 * sectionMix.getWidth(), sectionMix.getY() + separation, 0.6 * sectionMix.getWidth(), 0.6 * sectionMix.getWidth());
+    audioProcessor.waveViewerPost.setBounds(sectionMix.getX() + separation + margin, sectionMix.getBottom() - margin - 0.12 * sectionMix.getHeight(), sectionMix.getWidth() - 2.0f * separation - margin, 0.12 * sectionMix.getHeight());
+
+    lowcutSlider.setBounds(audioProcessor.waveViewerPost.getX(), sectionMix.getY() + 0.5 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth());
+    highcutSlider.setBounds(audioProcessor.waveViewerPost.getX() + 0.72 * sectionMix.getWidth(), sectionMix.getY() + 0.5 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth());
+
 }
 
 void InterfaceTestAudioProcessorEditor::resized()

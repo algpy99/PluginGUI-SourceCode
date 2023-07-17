@@ -74,6 +74,10 @@ private:
 
     Distortion<float> distortion;
 
+    juce::dsp::StateVariableTPTFilter<float> LPfilter;
+
+    juce::dsp::StateVariableTPTFilter<float> HPfilter;
+
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged(const juce::String& parameterID, float newValue) override;
 
