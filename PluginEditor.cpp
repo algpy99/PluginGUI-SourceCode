@@ -71,6 +71,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     filterSlider.setLookAndFeel(&myLookAndFeel);
 
     frequencyAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, frequencyID, filterSlider);
+    // add skew factor
 
     addAndMakeVisible(doubleSlider);
     doubleSlider.setSliderStyle(juce::Slider::SliderStyle::TwoValueHorizontal);
@@ -125,6 +126,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     buttonSquare.setLookAndFeel(&myLookAndFeel);
 
     //sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSquare);
+    
 
     buttonSine.setRadioGroupId(Waves);
     buttonSaw.setRadioGroupId(Waves);
