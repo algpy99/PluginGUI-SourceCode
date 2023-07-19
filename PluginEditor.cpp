@@ -130,15 +130,17 @@ void InterfaceTestAudioProcessorEditor::initDials()
     buttonSaw.setRadioGroupId(Waves);
     buttonSquare.setRadioGroupId(Waves);
 
-    addAndMakeVisible(lowcutSlider);
+    lowcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, highcutID, lowcutSlider);
     lowcutSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     lowcutSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 40, 20);
-    lowcutSlider.setRange(0.0, 100.0, 1.0);
+    //lowcutSlider.setRange(0.0, 100.0, 1.0);
+    lowcutSlider.setSkewFactor(10000.0);
     lowcutSlider.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, MyColours::orange);
-    lowcutSlider.setLookAndFeel(&myLookAndFeel);
     lowcutSlider.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
+    lowcutSlider.setLookAndFeel(&myLookAndFeel);
+    addAndMakeVisible(lowcutSlider);
 
-    lowcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, lowcutID, lowcutSlider);
+
 
     addAndMakeVisible(highcutSlider);
     highcutSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -148,7 +150,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     highcutSlider.setLookAndFeel(&myLookAndFeel);
     highcutSlider.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
-    highcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, highcutID, highcutSlider);
+    highcutAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, lowcutID, highcutSlider);
 }
 
 InterfaceTestAudioProcessorEditor::~InterfaceTestAudioProcessorEditor()
