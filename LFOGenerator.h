@@ -23,8 +23,8 @@ public:
 
     struct Parameters
     {
-        float m_frequency;
-        float m_depth = 100.0f;
+        //juce::SmoothedValue<float> m_frequency;
+        //float m_depth = 100.0f;
     };
 
     void setFrequency(float newFrequency);
@@ -74,8 +74,9 @@ private:
     float m_GlobalBypass{ false };
 
     float m_LFOValue;
+    float targetFrequency = 0.0f;
 
-    LFOType _type = LFOType::kSine;
+    LFOType _type = LFOType::kSaw;
 };
 
 }

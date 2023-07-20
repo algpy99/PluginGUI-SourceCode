@@ -22,15 +22,16 @@ void alex_dsp::LFOGenerator::reset()
     if (sampleRate <= 0) return;
 
     m_frequency.reset(sampleRate, 0.05);
-    m_frequency.setTargetValue(7.0);
+    //m_frequency.setTargetValue(7.0);
 
     m_depth.reset(sampleRate, 0.05);
-    m_depth.setTargetValue(100.0);
+    //m_depth.setTargetValue(100.0);
 }
 
 void alex_dsp::LFOGenerator::setFrequency(float newFrequency)
 {
     m_frequency.setTargetValue(newFrequency);
+    targetFrequency = newFrequency;
 }
 
 void alex_dsp::LFOGenerator::setDepth(float newDepth)
@@ -72,7 +73,7 @@ void alex_dsp::LFOGenerator::process()
 
     processSample();
 }
-
+ 
 void alex_dsp::LFOGenerator::processSample()
 {
     switch (_type)
@@ -97,19 +98,19 @@ void alex_dsp::LFOGenerator::processSample()
 
 void alex_dsp::LFOGenerator::processSine()
 {
-    m_LFOValue = a * sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) + offset;
+    //m_LFOValue = a * sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) + offset;
     m_time += m_deltaTime;
 }
 
 void alex_dsp::LFOGenerator::processSaw()
 {
-    m_LFOValue = (float)((acos(sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time))/1.5708f)+1.0f)/2.0f;
+    m_LFOValue = a * ((acos(sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time)) / 1.5708f) + offset);
     m_time += m_deltaTime;
 }
 
 void alex_dsp::LFOGenerator::processSquare()
 {
-    m_LFOValue = (float)(sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) >= 0.0f ? 1.0f : 0.0f);
+    //m_LFOValue = (float)(sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) >= 0.0f ? 1.0f : 0.0f);
     //float phase = (m_time * m_frequency.getNextValue()) - floor(m_time * m_frequency.getNextValue());
     //m_LFOValue = (2.0f * 1) * (phase < 0.5f ? phase : (1.0f - phase)) - 1;
     m_time += m_deltaTime;

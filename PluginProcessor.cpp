@@ -271,6 +271,7 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
+            //lfo.m_frequency.getNextValue();
             lfo.process();
             channelData[sample] = buffer.getSample(channel, sample) * lfo.getCurrentLFOValue();
         }
