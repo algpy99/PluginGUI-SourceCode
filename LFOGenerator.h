@@ -23,10 +23,13 @@ public:
 
     struct Parameters
     {
-        float m_frequency = 2;
+        //juce::SmoothedValue<float> m_frequency;
+        //float m_depth = 100.0f;
     };
 
     void setFrequency(float newFrequency);
+
+    void setDepth(float newDepth);
 
     void process();
 
@@ -58,13 +61,22 @@ private:
     float sampleRate;
 
     juce::SmoothedValue<float> m_frequency;
+    juce::SmoothedValue<float> m_depth;
+    //juce::SmoothedValue<float> m_LFOValue;
+
+    float frequency;
+    float depth;
+    float a;
+    float offset;
 
     float m_time;
     float m_deltaTime;
     float m_GlobalBypass{ false };
-    float m_LFOValue;
 
-    LFOType _type = LFOType::kSine;
+    float m_LFOValue;
+    float targetFrequency = 0.0f;
+
+    LFOType _type = LFOType::kSaw;
 };
 
 }

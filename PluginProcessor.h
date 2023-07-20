@@ -68,6 +68,8 @@ private:
     float roomSize = false;
     float width = false;
 
+    float mixValue;
+
     juce::dsp::Reverb reverb;
 
     alex_dsp::LFOGenerator lfo;

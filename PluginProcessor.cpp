@@ -56,10 +56,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout InterfaceTestAudioProcessor:
     auto pRoomSize = std::make_unique<juce::AudioParameterFloat>(roomsizeID, roomsizeName, 0.0f, 1.0f, 0.0f);
     auto pDamping = std::make_unique<juce::AudioParameterFloat>(dampingID, dampingName, 0.0f, 1.0f, 0.0f);
     auto pDrive = std::make_unique<juce::AudioParameterFloat>(driveID, driveName, 0.0f, 24.0f, 0.0f);
-    auto pFrequency = std::make_unique<juce::AudioParameterFloat>(frequencyID, frequencyName, 0.0f, 50.0f, 20.0f);
+    auto pFrequency = std::make_unique<juce::AudioParameterFloat>(frequencyID, frequencyName, 0.0f, 20.0f, 7.0f);
     auto pLFOType = std::make_unique<juce::AudioParameterChoice>(lfotypeID, lfotypeName, lfoTypes, 0);
-    auto pLowcut = std::make_unique<juce::AudioParameterFloat>(lowcutID, lowcutName, 22.0f, 22000.0f, 0.0f);
-    auto pHighcut = std::make_unique<juce::AudioParameterFloat>(highcutID, highcutName, 22.0f, 22000.0f, 22000.0f);
+    auto pLowcut = std::make_unique<juce::AudioParameterFloat>(lowcutID, lowcutName, juce::NormalisableRange<float>(20.0f, 20000.0f, 1.0f, 0.2f), 20000.0f);
+    auto pHighcut = std::make_unique<juce::AudioParameterFloat>(highcutID, highcutName, juce::NormalisableRange<float>(20.0f, 20000.0f, 1.0f, 0.2f), 0.0f);
     auto pMixLFO = std::make_unique<juce::AudioParameterFloat>(mixLFOID, mixLFOName, 0.0f, 100.0f, 100.0f);
 
     params.push_back(std::move(pRoomSize));
@@ -118,6 +118,7 @@ void InterfaceTestAudioProcessor::updateParameters()
     distortion.setDrive(treeState.getRawParameterValue(driveID)->load());
 
     lfo.setFrequency(treeState.getRawParameterValue(frequencyID)->load());
+    lfo.setDepth(treeState.getRawParameterValue(mixLFOID)->load());
 
     LPfilter.setCutoffFrequency(treeState.getRawParameterValue(highcutID)->load());
     HPfilter.setCutoffFrequency(treeState.getRawParameterValue(lowcutID)->load());
@@ -199,6 +200,7 @@ void InterfaceTestAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     reverb.reset();
     reverb.prepare(spec);
 
+    lfo.reset();
     lfo.prepare(spec);
 
     LPfilter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
@@ -269,6 +271,7 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
+            //lfo.m_frequency.getNextValue();
             lfo.process();
             channelData[sample] = buffer.getSample(channel, sample) * lfo.getCurrentLFOValue();
         }

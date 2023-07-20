@@ -265,6 +265,7 @@ private:
     //std::unique_ptr<juce::ParameterAttachment> lowcutAttach;
     //std::unique_ptr<juce::ParameterAttachment> highcutAttach;
     //std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> LFOAttach;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lowcutAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
