@@ -100,6 +100,8 @@ void InterfaceTestAudioProcessorEditor::initDials()
     LFODial.setLookAndFeel(&myLookAndFeel);
     LFODial.setColour(juce::Slider::textBoxOutlineColourId, MyColours::vitalMidGrey);
 
+    LFOAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, mixLFOID, LFODial);
+
     addAndMakeVisible(audioProcessor.waveViewerPost);
     audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::orange);
     addAndMakeVisible(audioProcessor.waveViewerPost);
