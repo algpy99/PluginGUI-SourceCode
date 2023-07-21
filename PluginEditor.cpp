@@ -194,6 +194,14 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     reverbDial1.setBounds(0.13067 * getWidth(), 0.2795 * getHeight(), 0.09763 * getWidth(), 0.09763 * getWidth());
     reverbDial2.setBounds(0.24505 * getWidth(), reverbDial1.getY(), reverbDial1.getWidth(), reverbDial1.getWidth());
     
+    DistoDial.setBounds(0.4385 * getWidth(), reverbDial1.getY(), reverbDial1.getWidth(), reverbDial1.getWidth());
+    
+    lowcutSlider.setBounds(0.1208 * getWidth(), 0.6956 * getHeight(), 0.0614 * getWidth(), 0.0614 * getWidth());
+    highcutSlider.setBounds(0.2032* getWidth(), 0.6956 * getHeight(), 0.0614 * getWidth(), 0.0614 * getWidth());
+
+    LFODial.setBounds(0.678 * getWidth(), 0.2762 * getHeight(), 0.2222 * getWidth(), 0.2222 * getWidth());
+
+
     /*
     reverbDial2.setBounds(reverbDial1.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     DistoDial.setBounds(reverbDial2.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
