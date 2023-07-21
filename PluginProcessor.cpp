@@ -96,22 +96,8 @@ void InterfaceTestAudioProcessor::updateParameters()
     parameters.dryLevel = 0.4f;     /**< Dry level, 0 to 1.0 */
     parameters.freezeMode = 0.0f;
 
-    /*
-    auto type = static_cast<int>(treeState.getRawParameterValue("lfoType")->load());
-    switch (type)
-    {
-    case 0:
-        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSine);
-        break;
-    case 1:
-        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSaw);
-        break;
-    case 2:
-        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSquare);
-        break;
-    }
-    */
 
+    
     reverb.setParameters(parameters);
 
     distortion.setMix(1.0);
@@ -122,6 +108,24 @@ void InterfaceTestAudioProcessor::updateParameters()
 
     LPfilter.setCutoffFrequency(treeState.getRawParameterValue(highcutID)->load());
     HPfilter.setCutoffFrequency(treeState.getRawParameterValue(lowcutID)->load());
+
+    auto type = static_cast<int>(treeState.getRawParameterValue(lfotypeID)->load());
+    DBG("type is: " << type);
+    switch (type)
+    {
+    case 0:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSine);
+        DBG("Uno");
+        break;
+    case 1:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSaw);
+        DBG("Dos");
+        break;
+    case 2:
+        lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSquare);
+        DBG("Tres");
+        break;
+    }
 }
 
 //==============================================================================
@@ -271,7 +275,6 @@ void InterfaceTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            //lfo.m_frequency.getNextValue();
             lfo.process();
             channelData[sample] = buffer.getSample(channel, sample) * lfo.getCurrentLFOValue();
         }

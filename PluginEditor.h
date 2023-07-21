@@ -239,6 +239,11 @@ private:
     juce::TextButton buttonSaw;
     juce::TextButton buttonSquare;
 
+    
+    juce::ComboBox combo;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttach;
+    
+
     std::vector<juce::Slider*> dials =
     {
         &reverbDial1,

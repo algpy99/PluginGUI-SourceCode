@@ -108,6 +108,13 @@ void InterfaceTestAudioProcessorEditor::initDials()
     addAndMakeVisible(audioProcessor.waveViewerPost);
     audioProcessor.waveViewerPost.setColours(MyColours::vitalMidGrey, MyColours::green);
 
+    combo.addItem("Sine", 1);
+    combo.addItem("Saw", 2);
+    combo.addItem("Square", 3);
+    //combo.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(combo);
+    comboAttach = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, lfotypeID, combo);
+
     addAndMakeVisible(buttonSine);
     buttonSine.setButtonText("Sine");
     buttonSine.setClickingTogglesState(true);
@@ -185,6 +192,8 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     reverbDial1.setBounds(sectionFX.getX() + 0.16 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     reverbDial2.setBounds(reverbDial1.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     DistoDial.setBounds(reverbDial2.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
+
+    combo.setBounds(sectionLFO.getX() + 0.15 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
 
     //buttonSine.setBounds(sectionLFO.getX() + 0.15 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
     //buttonSaw.setBounds(buttonSine.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());

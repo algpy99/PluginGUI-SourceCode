@@ -98,7 +98,7 @@ void alex_dsp::LFOGenerator::processSample()
 
 void alex_dsp::LFOGenerator::processSine()
 {
-    //m_LFOValue = a * sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) + offset;
+    m_LFOValue = a * sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) + offset;
     m_time += m_deltaTime;
 }
 
@@ -110,7 +110,7 @@ void alex_dsp::LFOGenerator::processSaw()
 
 void alex_dsp::LFOGenerator::processSquare()
 {
-    //m_LFOValue = (float)(sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) >= 0.0f ? 1.0f : 0.0f);
+    m_LFOValue = a * ((sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) >= 0.0f ? 1.0f : 0.0f)) + offset;
     //float phase = (m_time * m_frequency.getNextValue()) - floor(m_time * m_frequency.getNextValue());
     //m_LFOValue = (2.0f * 1) * (phase < 0.5f ? phase : (1.0f - phase)) - 1;
     m_time += m_deltaTime;

@@ -76,7 +76,7 @@ private:
     float m_LFOValue;
     float targetFrequency = 0.0f;
 
-    LFOType _type = LFOType::kSaw;
+    LFOType _type = LFOType::kSine;
 };
 
 }
