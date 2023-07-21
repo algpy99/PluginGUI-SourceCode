@@ -115,15 +115,12 @@ void InterfaceTestAudioProcessor::updateParameters()
     {
     case 0:
         lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSine);
-        DBG("Uno");
         break;
     case 1:
         lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSaw);
-        DBG("Dos");
         break;
     case 2:
         lfo.setLFOType(alex_dsp::LFOGenerator::LFOType::kSquare);
-        DBG("Tres");
         break;
     }
 }

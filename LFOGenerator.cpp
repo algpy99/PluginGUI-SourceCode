@@ -111,8 +111,6 @@ void alex_dsp::LFOGenerator::processSaw()
 void alex_dsp::LFOGenerator::processSquare()
 {
     m_LFOValue = a * ((sin(2 * juce::double_Pi * m_frequency.getNextValue() * m_time) >= 0.0f ? 1.0f : 0.0f)) + offset;
-    //float phase = (m_time * m_frequency.getNextValue()) - floor(m_time * m_frequency.getNextValue());
-    //m_LFOValue = (2.0f * 1) * (phase < 0.5f ? phase : (1.0f - phase)) - 1;
     m_time += m_deltaTime;
 }
 
@@ -120,14 +118,3 @@ float alex_dsp::LFOGenerator::getCurrentLFOValue()
 {
     return m_LFOValue;
 }
-
-/*
-void alex_dsp::LFOGenerator::setParameter(Parameters parameter, float parameterValue)
-{
-    switch (parameter)
-    {
-    case alex_dsp::LFOGenerator::Parameters::kFrequency: m_frequency = static_cast<int>(parameterValue); break;
-    case alex_dsp::LFOGenerator::Parameters::kBypass: m_GlobalBypass = static_cast<bool>(parameterValue); break;
-    }
-}
-*/
