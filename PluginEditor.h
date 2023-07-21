@@ -98,7 +98,7 @@ public:
         int centerX = x + (width - textWidth) / 2;
         int centerY = y + (height - font.getHeight()) / 2;
         g.setColour(fill);
-        g.drawText(valueString, centerX, centerY, textWidth, font.getHeight(), juce::Justification::centred, false);
+        //g.drawText(valueString, centerX, centerY, textWidth, font.getHeight(), juce::Justification::centred, false);
 
     }
 
@@ -120,7 +120,7 @@ public:
 
             juce::Rectangle<float> sliderThumb{ sliderPos, bounds.getY() + 0.6f * bounds.getHeight(), 0.01f * bounds.getWidth(), 0.3f * bounds.getHeight() };
             g.setColour(MyColours::green);            
-            g.fillRoundedRectangle(sliderThumb, 0.15f);
+            //g.fillRoundedRectangle(sliderThumb, 0.15f);
 
             // Custom value display
             juce::String valueString = slider.getTextFromValue(slider.getValue());
@@ -130,7 +130,7 @@ public:
             g.setFont(font);
             int textWidth = font.getStringWidth(valueString);
             g.setColour(MyColours::green);
-            g.drawText(valueString, bounds.getX(), bounds.getY() - 0.1f * bounds.getHeight(), textWidth, font.getHeight(), juce::Justification::centred, false);
+            //g.drawText(valueString, bounds.getX(), bounds.getY() - 0.1f * bounds.getHeight(), textWidth, font.getHeight(), juce::Justification::centred, false);
 
         }
 
