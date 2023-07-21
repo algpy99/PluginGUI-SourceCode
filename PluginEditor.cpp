@@ -113,7 +113,7 @@ void InterfaceTestAudioProcessorEditor::initDials()
     buttonSine.setClickingTogglesState(true);
     buttonSine.setLookAndFeel(&myLookAndFeel);
 
-    sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSine);
+    //sineAttach = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.treeState, lfotypeID, buttonSine);
 
     addAndMakeVisible(buttonSaw);
     buttonSaw.setButtonText("Saw");
@@ -186,9 +186,9 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     reverbDial2.setBounds(reverbDial1.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     DistoDial.setBounds(reverbDial2.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
 
-    buttonSine.setBounds(sectionLFO.getX() + 0.15 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
-    buttonSaw.setBounds(buttonSine.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
-    buttonSquare.setBounds(buttonSaw.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
+    //buttonSine.setBounds(sectionLFO.getX() + 0.15 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
+    //buttonSaw.setBounds(buttonSine.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
+    //buttonSquare.setBounds(buttonSaw.getRight() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.15 * sectionLFO.getHeight(), 0.2 * sectionLFO.getWidth(), 0.15 * sectionLFO.getHeight());
 
     filterSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), sectionLFO.getY() + 0.5 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());
     //doubleSlider.setBounds(sectionLFO.getX() + 0.05 * sectionLFO.getWidth(), filterSlider.getY() + 0.25 * sectionLFO.getHeight(), 0.9 * sectionLFO.getWidth(), 0.2 * sectionLFO.getHeight());

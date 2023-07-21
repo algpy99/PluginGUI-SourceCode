@@ -258,7 +258,7 @@ private:
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencyAttach;
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sineAttach;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sineAttach;
     //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sawAttach;
     //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> squareAttach;
 
