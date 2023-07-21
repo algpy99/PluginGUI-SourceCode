@@ -32,7 +32,7 @@ public:
 
         auto radius = juce::jmin(width, height) / 2.0f;
         auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-        auto lineW = 0.4f * juce::jmin(radius * 0.2f, radius * 0.5f);
+        auto lineW = 0.27f * juce::jmin(radius * 0.2f, radius * 0.5f);
         auto arcRadius = radius;
 
         juce::Path buttonBackground;
@@ -58,7 +58,8 @@ public:
             true);
 
         g.setColour(MyColours::vitalMidGrey);
-        g.strokePath(backgroundArc, juce::PathStrokeType(lineW));
+        //g.strokePath(backgroundArc, juce::PathStrokeType(lineW));
+
 
         if (slider.isEnabled())
         {
@@ -85,7 +86,7 @@ public:
 
         // Custom value display
         juce::String valueString = slider.getTextFromValue(slider.getValue());
-        float fontSize = 0.2f * juce::jmin(width, height);
+        float fontSize = 0.125f * juce::jmin(width, height);
         if (juce::jmin(width, height) > 120)
         {
             fontSize = 0.1f * juce::jmin(width, height);
@@ -217,11 +218,13 @@ private:
     float margin;
     float separation;
 
+    /*
     juce::Rectangle<float> topBorder;
     juce::Rectangle<float> sectionFX;
     juce::Rectangle<float> sectionLFO;
     juce::Rectangle<float> sectionMix;
     juce::Rectangle<float> bottomBorder;
+    */
 
     juce::Rectangle<float> lineFX;
 

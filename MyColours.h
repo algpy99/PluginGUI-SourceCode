@@ -15,7 +15,7 @@ namespace MyColours
 {
     const juce::Colour cream{ 0xffE4E2DD };
     const juce::Colour grey{ 0xff2B2B2B };
-    const juce::Colour orange{ 0xffFF914D };
+    const juce::Colour orange{ 0xffe96817 };
     const juce::Colour green{ 0xff00BF63 };
 
     const juce::Colour bossCream{ 0xfff6f9e4 };

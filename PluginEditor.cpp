@@ -182,14 +182,19 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
     margin = getWidth() * 0.02f;
     separation = getWidth() * 0.01f;
 
+    /*
     topBorder = { 1.0f * getX(), 1.0f * getY(),  1.0f * getWidth(), top};
     sectionFX = { margin, top + margin,  0.5f * getWidth(), 0.35f * getHeight() - margin };
     sectionLFO = { margin, sectionFX.getBottom() + separation, 0.5f * getWidth(), 0.47f * getHeight() - separation };
     sectionMix = { sectionFX.getRight() + separation, top + margin, 0.46f * getWidth() - separation, 0.82f * getHeight() - margin };
     bottomBorder = { 1.0f * getX(), sectionLFO.getBottom() + margin,  1.0f * getWidth(), 0.5f * top};
+    */
 
     // DIALS BOUNDS
-    reverbDial1.setBounds(sectionFX.getX() + 0.16 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
+    reverbDial1.setBounds(0.13067 * getWidth(), 0.2795 * getHeight(), 0.09763 * getWidth(), 0.09763 * getWidth());
+    reverbDial2.setBounds(0.24505 * getWidth(), reverbDial1.getY(), reverbDial1.getWidth(), reverbDial1.getWidth());
+    
+    /*
     reverbDial2.setBounds(reverbDial1.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
     DistoDial.setBounds(reverbDial2.getRight() + 0.05 * sectionFX.getWidth(), sectionFX.getY() + 0.2 * sectionFX.getHeight(), 0.2 * sectionFX.getWidth(), 0.2 * sectionFX.getWidth());
 
@@ -206,7 +211,7 @@ void InterfaceTestAudioProcessorEditor::paint (juce::Graphics& g)
 
     lowcutSlider.setBounds(audioProcessor.waveViewerPost.getX(), sectionMix.getY() + 0.5 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth());
     highcutSlider.setBounds(audioProcessor.waveViewerPost.getX() + 0.72 * sectionMix.getWidth(), sectionMix.getY() + 0.5 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth(), 0.18 * sectionMix.getWidth());
-
+    */
 }
 
 void InterfaceTestAudioProcessorEditor::resized()
