@@ -60,7 +60,6 @@ public:
         g.setColour(MyColours::vitalMidGrey);
         //g.strokePath(backgroundArc, juce::PathStrokeType(lineW));
 
-
         if (slider.isEnabled())
         {
             juce::Path valueArc;
@@ -99,7 +98,6 @@ public:
         int centerY = y + (height - font.getHeight()) / 2;
         g.setColour(fill);
         //g.drawText(valueString, centerX, centerY, textWidth, font.getHeight(), juce::Justification::centred, false);
-
     }
 
     void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle style, juce::Slider& slider) override
@@ -110,7 +108,7 @@ public:
 
             juce::Rectangle<float> sliderOuterPath{ bounds.getX(), bounds.getY() + 0.4f * bounds.getHeight(), bounds.getWidth(), 0.15f * bounds.getHeight() };
             g.setColour(MyColours::vitalMidGrey);
-            g.fillRoundedRectangle(sliderOuterPath, 0.15f);
+            //g.fillRoundedRectangle(sliderOuterPath, 0.15f);
 
 
             juce::Rectangle<float> sliderPath{ bounds.getX(), bounds.getY() + 0.4f * bounds.getHeight(), sliderPos - bounds.getX(), 0.15f * bounds.getHeight() };
@@ -173,7 +171,6 @@ public:
             juce::String maxValueString = slider.getTextFromValue(slider.getMaxValue());
             g.setColour(MyColours::orange);
             g.drawText(maxValueString, bounds.getRight() - 0.05f * bounds.getWidth(), bounds.getY() - 0.1f * bounds.getHeight(), textWidth, font.getHeight(), juce::Justification::centred, false);
-
         }
     }
 
@@ -186,6 +183,40 @@ public:
         button.setColour(juce::TextButton::ColourIds::textColourOffId, MyColours::vitalGrey);
         g.setColour(backgroundColour);
         g.fillRect(buttonArea);
+    }
+
+    void drawComboBox(juce::Graphics& g, int width, int height, bool isButtonDown, int buttonX, int buttonY, int buttonW, int buttonH, juce::ComboBox& comboBox) override
+    {
+        auto area = comboBox.getLocalBounds();
+
+        juce::Colour backgroundColor = MyColours::vitalMidGrey.withAlpha(0.0f);
+        juce::Colour arrowColor = MyColours::green;
+
+        g.setColour(backgroundColor);
+        g.fillRect(comboBox.getLocalBounds());
+
+        juce::Path arrow;
+        arrow.addTriangle(0.0f, 0.0f, 8.0f, 0.0f, 4.0f, 5.0f);
+        g.setColour(arrowColor);
+        g.fillPath(arrow, juce::AffineTransform::translation(buttonX + buttonW * 0.5f - 4.0f, buttonY + buttonH * 0.5f - 2.5f));
+    }
+
+    void drawPopupMenuItem(juce::Graphics& g, const juce::Rectangle<int>& area, bool isSeparator, bool isActive, bool isHighlighted, bool isTicked, bool hasSubMenu, const juce::String& text, const juce::String& shortcutKeyText, const juce::Drawable* icon, const juce::Colour* textColour) override
+    {
+        juce::Colour backgroundColor = MyColours::keeperGrey;
+        juce::Colour outlineColor = MyColours::keeperGrey;
+        juce::Colour textColor = MyColours::cream;
+
+        if (isHighlighted)
+            g.fillAll(backgroundColor.brighter(0.2f));
+        else
+            g.fillAll(backgroundColor.withAlpha(0.0f));
+
+        g.setColour(outlineColor);
+        g.drawRect(area);
+
+        g.setColour(textColor);
+        g.drawText(text, area.reduced(5, 0), juce::Justification::centredLeft, true);
     }
 };
 
@@ -218,14 +249,6 @@ private:
     float margin;
     float separation;
 
-    /*
-    juce::Rectangle<float> topBorder;
-    juce::Rectangle<float> sectionFX;
-    juce::Rectangle<float> sectionLFO;
-    juce::Rectangle<float> sectionMix;
-    juce::Rectangle<float> bottomBorder;
-    */
-
     juce::Rectangle<float> lineFX;
 
     juce::Slider reverbDial1;
@@ -242,11 +265,9 @@ private:
     juce::TextButton buttonSaw;
     juce::TextButton buttonSquare;
 
-    
     juce::ComboBox combo;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttach;
     
-
     std::vector<juce::Slider*> dials =
     {
         &reverbDial1,
@@ -266,22 +287,10 @@ private:
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencyAttach;
 
-    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sineAttach;
-    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> sawAttach;
-    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> squareAttach;
-
-    //std::unique_ptr<juce::ParameterAttachment> lowcutAttach;
-    //std::unique_ptr<juce::ParameterAttachment> highcutAttach;
-    //std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> LFOAttach;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lowcutAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highcutAttach;
-
-    enum RadioButtonIds
-    {
-        Waves = 1001
-    };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InterfaceTestAudioProcessorEditor)
 };
